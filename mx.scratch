@@ -25,7 +25,7 @@
     <name>stm32f7_FreeRTOS</name>				
     <device>STM32F767VIHx</device>		 
     <heapSize>0x10000</heapSize>
-    <stackSize>0x80000</stackSize>
+    <stackSize>0x40000</stackSize>
     
     	<board>custom</board>
 			

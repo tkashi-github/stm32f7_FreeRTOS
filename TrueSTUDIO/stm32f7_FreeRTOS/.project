@@ -72,19 +72,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>Application</name>
+			
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			
 		</link>
 		<link>
-			<name>Drivers</name>
+			
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			
 		</link>
 		<link>
-			<name>Middlewares</name>
+			
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			
 		</link>
 		<link>
 			<name>Application/TrueSTUDIO</name>
@@ -126,11 +126,7 @@
 			<type>1</type>
 			<location>PARENT-1-PROJECT_LOC/startup_stm32f767xx.s</location>
 		</link>
-		<link>
-			<name>Application/User/bsp_driver_sd.c</name>
-			<type>1</type>
-			<location>PARENT-2-PROJECT_LOC/Src/bsp_driver_sd.c</location>
-		</link>
+		
 		<link>
 			<name>Application/User/crc.c</name>
 			<type>1</type>
@@ -171,11 +167,7 @@
 			<type>1</type>
 			<location>PARENT-2-PROJECT_LOC/Src/rtc.c</location>
 		</link>
-		<link>
-			<name>Application/User/sd_diskio.c</name>
-			<type>1</type>
-			<location>PARENT-2-PROJECT_LOC/Src/sd_diskio.c</location>
-		</link>
+		
 		<link>
 			<name>Application/User/sdmmc.c</name>
 			<type>1</type>
@@ -459,5 +451,25 @@
 			<name>Drivers/CMSIS/system_stm32f7xx.c</name>
 			<type>1</type>
 			<location>PARENT-2-PROJECT_LOC//Src/system_stm32f7xx.c</location>
+		</link><link>
+			<name>Application</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link><link>
+			<name>Middlewares</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link><link>
+			<name>Drivers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link><link>
+			<name>Application/User/sd_diskio.c</name>
+			<type>1</type>
+			<location>PARENT-2-PROJECT_LOC/Src/sd_diskio.c</location>
+		</link><link>
+			<name>Application/User/bsp_driver_sd.c</name>
+			<type>1</type>
+			<location>PARENT-2-PROJECT_LOC/Src/bsp_driver_sd.c</location>
 		</link></linkedResources>
 </projectDescription>
