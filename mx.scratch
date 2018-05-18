@@ -30,7 +30,7 @@
     	<board>custom</board>
 			
     <usedDebug>true</usedDebug>
-    	<debugprobe>jtag</debugprobe>
+    	<debugprobe>swd</debugprobe>
     <optimization></optimization>
     <icfloc>1</icfloc>
     <Adefines>

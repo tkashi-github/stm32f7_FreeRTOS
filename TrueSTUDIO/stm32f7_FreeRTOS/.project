@@ -178,11 +178,7 @@
 			<type>1</type>
 			<location>PARENT-2-PROJECT_LOC/Src/stm32f7xx_hal_msp.c</location>
 		</link>
-		<link>
-			<name>Application/User/stm32f7xx_hal_timebase_TIM.c</name>
-			<type>1</type>
-			<location>PARENT-2-PROJECT_LOC/Src/stm32f7xx_hal_timebase_TIM.c</location>
-		</link>
+		
 		<link>
 			<name>Application/User/stm32f7xx_it.c</name>
 			<type>1</type>
@@ -452,6 +448,26 @@
 			<type>1</type>
 			<location>PARENT-2-PROJECT_LOC//Src/system_stm32f7xx.c</location>
 		</link><link>
+			
+			<type>2</type>
+			
+		</link><link>
+			
+			<type>2</type>
+			
+		</link><link>
+			
+			<type>2</type>
+			
+		</link><link>
+			<name>Application/User/sd_diskio.c</name>
+			<type>1</type>
+			<location>PARENT-2-PROJECT_LOC/Src/sd_diskio.c</location>
+		</link><link>
+			<name>Application/User/bsp_driver_sd.c</name>
+			<type>1</type>
+			<location>PARENT-2-PROJECT_LOC/Src/bsp_driver_sd.c</location>
+		</link><link>
 			<name>Application</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -464,12 +480,8 @@
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link><link>
-			<name>Application/User/sd_diskio.c</name>
+			<name>Application/User/stm32f7xx_hal_timebase_TIM.c</name>
 			<type>1</type>
-			<location>PARENT-2-PROJECT_LOC/Src/sd_diskio.c</location>
-		</link><link>
-			<name>Application/User/bsp_driver_sd.c</name>
-			<type>1</type>
-			<location>PARENT-2-PROJECT_LOC/Src/bsp_driver_sd.c</location>
+			<location>PARENT-2-PROJECT_LOC/Src/stm32f7xx_hal_timebase_TIM.c</location>
 		</link></linkedResources>
 </projectDescription>

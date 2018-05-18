@@ -176,8 +176,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 432;
+  RCC_OscInitStruct.PLL.PLLM = 4;
+  RCC_OscInitStruct.PLL.PLLN = 216;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -209,11 +209,11 @@ void SystemClock_Config(void)
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_UART7
                               |RCC_PERIPHCLK_SDMMC1|RCC_PERIPHCLK_I2S
                               |RCC_PERIPHCLK_CLK48;
-  PeriphClkInitStruct.PLLI2S.PLLI2SN = 384;
+  PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
   PeriphClkInitStruct.PLLI2S.PLLI2SP = RCC_PLLP_DIV2;
   PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
   PeriphClkInitStruct.PLLI2S.PLLI2SQ = 2;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 192;
+  PeriphClkInitStruct.PLLSAI.PLLSAIN = 96;
   PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
   PeriphClkInitStruct.PLLSAI.PLLSAIQ = 3;
   PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV4;
