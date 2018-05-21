@@ -51,19 +51,38 @@
 #include "task.h"
 #include "cmsis_os.h"
 
-/* USER CODE BEGIN Includes */     
+/* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
-osThreadId defaultTaskHandle;
+typedef enum{
+	enLED0,
+	enLED1,
+	enLED2,
+	enLED_MAX,
+}enLedNo_t;
+
+const uint32_t u32LEDPort = (uint32_t)GPIOB;
+
+const uint16_t u16LEDPin[enLED_MAX] = {
+	GPIO_PIN_0,
+	GPIO_PIN_7,
+	GPIO_PIN_14,
+};
+const uint32_t u32LEDBlinkTime[enLED_MAX] = {
+	100u,
+	200u,
+	500u
+};
+osThreadId LEDTaskHandle[enLED_MAX];
 
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
-void StartDefaultTask(void const * argument);
+void LEDTask(void const *argument);
 
 extern void MX_USB_DEVICE_Init(void);
 extern void MX_FATFS_Init(void);
@@ -78,9 +97,9 @@ void vApplicationIdleHook(void);
 void vApplicationTickHook(void);
 
 /* USER CODE BEGIN 2 */
-__weak void vApplicationIdleHook( void )
+__weak void vApplicationIdleHook(void)
 {
-   /* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
+	/* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
    to 1 in FreeRTOSConfig.h. It will be called on each iteration of the idle
    task. It is essential that code added to this hook function never attempts
    to block in any way (for example, call xQueueReceive() with a block time
@@ -93,9 +112,9 @@ __weak void vApplicationIdleHook( void )
 /* USER CODE END 2 */
 
 /* USER CODE BEGIN 3 */
-__weak void vApplicationTickHook( void )
+__weak void vApplicationTickHook(void)
 {
-   /* This function will be called by each tick interrupt if
+	/* This function will be called by each tick interrupt if
    configUSE_TICK_HOOK is set to 1 in FreeRTOSConfig.h. User code can be
    added here, but the tick hook is called from an interrupt context, so
    code must not attempt to block, and only the interrupt safe FreeRTOS API
@@ -105,58 +124,62 @@ __weak void vApplicationTickHook( void )
 
 /* Init FreeRTOS */
 
-void MX_FREERTOS_Init(void) {
-  /* USER CODE BEGIN Init */
-       
-  /* USER CODE END Init */
+void MX_FREERTOS_Init(void)
+{
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
+	/* USER CODE END Init */
 
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
+	/* USER CODE BEGIN RTOS_MUTEX */
+	/* add mutexes, ... */
+	/* USER CODE END RTOS_MUTEX */
 
-  /* USER CODE BEGIN RTOS_TIMERS */
-  /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
+	/* USER CODE BEGIN RTOS_SEMAPHORES */
+	/* add semaphores, ... */
+	/* USER CODE END RTOS_SEMAPHORES */
 
-  /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 1024);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+	/* USER CODE BEGIN RTOS_TIMERS */
+	/* start timers, add new ones, ... */
+	/* USER CODE END RTOS_TIMERS */
 
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
+	/* Create the thread(s) */
+	/* definition and creation of defaultTask */
+	//osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 1024);
+	osThreadDef(Led0Task, LEDTask, osPriorityNormal, 0, 1024);
+	osThreadDef(Led1Task, LEDTask, osPriorityNormal, 1, 1024);
+	osThreadDef(Led2Task, LEDTask, osPriorityNormal, 2, 1024);
+	LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
+	LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
+	LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
 
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
+	/* USER CODE BEGIN RTOS_THREADS */
+	/* add threads, ... */
+	/* USER CODE END RTOS_THREADS */
+
+	/* USER CODE BEGIN RTOS_QUEUES */
+	/* add queues, ... */
+	/* USER CODE END RTOS_QUEUES */
 }
 
 /* StartDefaultTask function */
-void StartDefaultTask(void const * argument)
+void LEDTask(void const *argument)
 {
-  /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
+	if((uint32_t)argument >= (uint32_t)enLED_MAX){
+		osThreadSuspend(osThreadGetId());
+	}
 
-  /* init code for FATFS */
-  MX_FATFS_Init();
-
-  /* USER CODE BEGIN StartDefaultTask */
-  /* Infinite loop */
-  for(;;)
-  {
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7|GPIO_PIN_14|GPIO_PIN_0);
-	  vTaskDelay(500);
-  }
-  /* USER CODE END StartDefaultTask */
+	/* USER CODE BEGIN StartDefaultTask */
+	/* Infinite loop */
+	for (;;)
+	{
+		HAL_GPIO_TogglePin(u32LEDPort, u16LEDPin[(uint32_t)argument]);
+		vTaskDelay(u32LEDBlinkTime[(uint32_t)argument]);
+	}
+	/* USER CODE END StartDefaultTask */
 }
 
 /* USER CODE BEGIN Application */
-     
+
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
