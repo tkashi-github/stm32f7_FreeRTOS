@@ -51,7 +51,9 @@
 #include "task.h"
 #include "cmsis_os.h"
 
-/* USER CODE BEGIN Includes */     
+/* USER CODE BEGIN Includes */
+#include <string.h>
+#include "usart.h"
 
 /* USER CODE END Includes */
 
@@ -59,14 +61,15 @@
 osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN Variables */
-typedef enum{
+typedef enum
+{
 	enLED0,
 	enLED1,
 	enLED2,
 	enLED_MAX,
-}enLedNo_t;
+} enLedNo_t;
 
-const uint32_t u32LEDPort = (uint32_t)GPIOB;
+GPIO_TypeDef* LEDPort = GPIOB;
 
 const uint16_t u16LEDPin[enLED_MAX] = {
 	GPIO_PIN_0,
@@ -76,20 +79,19 @@ const uint16_t u16LEDPin[enLED_MAX] = {
 const uint32_t u32LEDBlinkTime[enLED_MAX] = {
 	100u,
 	200u,
-	500u
-};
+	500u};
 osThreadId LEDTaskHandle[enLED_MAX];
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
-void StartDefaultTask(void const * argument);
+void StartDefaultTask(void const *argument);
 
 extern void MX_USB_DEVICE_Init(void);
 extern void MX_FATFS_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* USER CODE BEGIN FunctionPrototypes */
-
+void LEDTask(void const *argument);
 /* USER CODE END FunctionPrototypes */
 
 /* Hook prototypes */
@@ -124,65 +126,66 @@ __weak void vApplicationTickHook(void)
 
 /* Init FreeRTOS */
 
-void MX_FREERTOS_Init(void) {
-  /* USER CODE BEGIN Init */
+void MX_FREERTOS_Init(void)
+{
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	/* USER CODE END Init */
 
-  /* USER CODE BEGIN RTOS_MUTEX */
+	/* USER CODE BEGIN RTOS_MUTEX */
 	/* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
+	/* USER CODE END RTOS_MUTEX */
 
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
+	/* USER CODE BEGIN RTOS_SEMAPHORES */
 	/* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
+	/* USER CODE END RTOS_SEMAPHORES */
 
-  /* USER CODE BEGIN RTOS_TIMERS */
+	/* USER CODE BEGIN RTOS_TIMERS */
 	/* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
+	/* USER CODE END RTOS_TIMERS */
 
-  /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 1024);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+	/* Create the thread(s) */
+	/* definition and creation of defaultTask */
+	osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 1024);
+	defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-  /* USER CODE BEGIN RTOS_THREADS */
+	/* USER CODE BEGIN RTOS_THREADS */
+	
+	/* USER CODE END RTOS_THREADS */
+
+	/* USER CODE BEGIN RTOS_QUEUES */
+	/* add queues, ... */
+	/* USER CODE END RTOS_QUEUES */
+}
+
+/* StartDefaultTask function */
+void StartDefaultTask(void const *argument)
+{
+	char *pszTemp = "NUCLEO-F767ZI\r\n";
+	/* init code for USB_DEVICE */
+	MX_USB_DEVICE_Init();
+
+	/* init code for FATFS */
+	MX_FATFS_Init();
+
+	/* USER CODE BEGIN StartDefaultTask */
+	HAL_UART_Transmit(&huart3, (uint8_t *)pszTemp, (uint16_t)strlen(pszTemp), 50u);
 	osThreadDef(Led0Task, LEDTask, osPriorityNormal, 0, 1024);
 	osThreadDef(Led1Task, LEDTask, osPriorityNormal, 0, 1024);
 	osThreadDef(Led2Task, LEDTask, osPriorityNormal, 0, 1024);
 	LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
 	LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
 	LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
-  /* USER CODE END RTOS_THREADS */
 
-  /* USER CODE BEGIN RTOS_QUEUES */
-	/* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
-}
-
-/* StartDefaultTask function */
-void StartDefaultTask(void const * argument)
-{
-  /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
-
-  /* init code for FATFS */
-  MX_FATFS_Init();
-
-  /* USER CODE BEGIN StartDefaultTask */
-	/* Infinite loop */
-	for (;;)
-	{
-		HAL_GPIO_TogglePin(u32LEDPort, u16LEDPin[(uint32_t)argument]);
-		vTaskDelay(u32LEDBlinkTime[(uint32_t)argument]);
-	}
-  /* USER CODE END StartDefaultTask */
+	osThreadSuspend(osThreadGetId());
+	/* USER CODE END StartDefaultTask */
 }
 
 /* USER CODE BEGIN Application */
 void LEDTask(void const *argument)
 {
-	if((uint32_t)argument >= (uint32_t)enLED_MAX){
+	if ((uint32_t)argument >= (uint32_t)enLED_MAX)
+	{
 		osThreadSuspend(osThreadGetId());
 	}
 
@@ -190,7 +193,7 @@ void LEDTask(void const *argument)
 	/* Infinite loop */
 	for (;;)
 	{
-		HAL_GPIO_TogglePin(u32LEDPort, u16LEDPin[(uint32_t)argument]);
+		HAL_GPIO_TogglePin(LEDPort, u16LEDPin[(uint32_t)argument]);
 		vTaskDelay(u32LEDBlinkTime[(uint32_t)argument]);
 	}
 	/* USER CODE END StartDefaultTask */

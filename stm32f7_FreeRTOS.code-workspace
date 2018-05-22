@@ -58,6 +58,9 @@
 			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS",
 			"${workspaceFolder}/Drivers/CMSIS/Include",
 		],
+		"files.associations": {
+			"usart.h": "c"
+		},
 	},
 	
 }
