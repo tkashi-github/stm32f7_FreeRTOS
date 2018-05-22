@@ -52,6 +52,8 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "usart.h"
 
@@ -69,7 +71,7 @@ typedef enum
 	enLED_MAX,
 } enLedNo_t;
 
-GPIO_TypeDef* LEDPort = GPIOB;
+GPIO_TypeDef *LEDPort = GPIOB;
 
 const uint16_t u16LEDPin[enLED_MAX] = {
 	GPIO_PIN_0,
@@ -150,7 +152,7 @@ void MX_FREERTOS_Init(void)
 	defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
 	/* USER CODE BEGIN RTOS_THREADS */
-	
+
 	/* USER CODE END RTOS_THREADS */
 
 	/* USER CODE BEGIN RTOS_QUEUES */
@@ -184,19 +186,22 @@ void StartDefaultTask(void const *argument)
 /* USER CODE BEGIN Application */
 void LEDTask(void const *argument)
 {
+	char szTemp[64];
 	if ((uint32_t)argument >= (uint32_t)enLED_MAX)
 	{
 		osThreadSuspend(osThreadGetId());
 	}
 
-	/* USER CODE BEGIN StartDefaultTask */
+	snprintf(szTemp, 64, "LED%dTask\r\n", argument);
+
 	/* Infinite loop */
 	for (;;)
 	{
+		HAL_UART_Transmit(&huart3, (uint8_t*)szTemp, (uint16_t)strlen(szTemp), 50);
 		HAL_GPIO_TogglePin(LEDPort, u16LEDPin[(uint32_t)argument]);
 		vTaskDelay(u32LEDBlinkTime[(uint32_t)argument]);
 	}
-	/* USER CODE END StartDefaultTask */
+
 }
 /* USER CODE END Application */
 
