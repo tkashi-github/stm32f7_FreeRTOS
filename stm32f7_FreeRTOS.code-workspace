@@ -1,0 +1,63 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"c-cpp-flylint.cppcheck.includePaths": [
+			"C:\\Program Files (x86)\\Atollic\\TrueSTUDIO for STM32 9.0.1\\ARMTools\\lib\\gcc\\arm-atollic-eabi\\6.3.1\\include",
+		],
+		"c-cpp-flylint.clang.enable": true,
+		"c-cpp-flylint.cppcheck.standard": [
+			"c11"
+		],
+		"c-cpp-flylint.flexelint.enable": false,
+		"c-cpp-flylint.cppcheck.platform": "win32A", 
+		"c-cpp-flylint.language": "c",
+		"git.ignoreLimitWarning": true,
+		"c-cpp-flylint.clang.configFile": "${workspaceFolder}/.vscode/.clang_complete",
+		"c-cpp-flylint.clang.includePaths": [
+			"C:\\Program Files (x86)\\Atollic\\TrueSTUDIO for STM32 9.0.1\\ARMTools\\lib\\gcc\\arm-atollic-eabi\\6.3.1\\include",
+			"${workspaceFolder}/Inc",
+			"${workspaceFolder}/Drivers/STM32F7xx_HAL_Driver/Inc",
+			"${workspaceFolder}/Drivers/STM32F7xx_HAL_Driver/Inc/Legacy",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1",
+			"${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
+			"${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Class/DFU/Inc",
+			"${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F7xx/Include",
+			"${workspaceFolder}/Middlewares/Third_Party/FatFs/src",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS",
+			"${workspaceFolder}/Drivers/CMSIS/Include",
+		],
+		"c-cpp-flylint.clang.defines": [
+			"__weak=__attribute__((weak))",
+			"__packed=__attribute__((__packed__))",
+			"USE_HAL_DRIVER",
+			"STM32F767xx",
+		],
+		"C_Cpp.default.cStandard": "c11",
+		"C_Cpp.default.defines": [
+			"__weak=__attribute__((weak))",
+			"__packed=__attribute__((__packed__))",
+			"USE_HAL_DRIVER",
+			"STM32F767xx",
+		],
+		"C_Cpp.default.includePath": [
+			"C:\\Program Files (x86)\\Atollic\\TrueSTUDIO for STM32 9.0.1\\ARMTools\\lib\\gcc\\arm-atollic-eabi\\6.3.1\\include",
+			"${workspaceFolder}/Inc",
+			"${workspaceFolder}/Drivers/STM32F7xx_HAL_Driver/Inc",
+			"${workspaceFolder}/Drivers/STM32F7xx_HAL_Driver/Inc/Legacy",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1",
+			"${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
+			"${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Class/DFU/Inc",
+			"${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F7xx/Include",
+			"${workspaceFolder}/Middlewares/Third_Party/FatFs/src",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS",
+			"${workspaceFolder}/Drivers/CMSIS/Include",
+		],
+	},
+	
+}
