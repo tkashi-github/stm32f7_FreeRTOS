@@ -1,8 +1,8 @@
 /**
-  ******************************************************************************
-  * File Name          : ETH.h
-  * Description        : This file provides code for the configuration
-  *                      of the ETH instances.
+ ******************************************************************************
+  * File Name          : ethernetif.h
+  * Description        : This file provides initialization code for LWIP
+  *                      middleWare.
   ******************************************************************************
   * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -46,46 +46,30 @@
   *
   ******************************************************************************
   */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __eth_H
-#define __eth_H
-#ifdef __cplusplus
- extern "C" {
+  
+
+#ifndef __ETHERNETIF_H__
+#define __ETHERNETIF_H__
+
+#include "lwip/err.h"
+#include "lwip/netif.h"
+#include "cmsis_os.h"
+
+/* Within 'USER CODE' section, code will be kept by default at each generation */
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+
+/* Exported functions ------------------------------------------------------- */
+err_t ethernetif_init(struct netif *netif);
+
+void ethernetif_input( void const * argument );
+void ethernetif_update_config(struct netif *netif);
+void ethernetif_notify_conn_changed(struct netif *netif);
+
+/* USER CODE BEGIN 1 */
+
+/* USER CODE END 1 */
 #endif
-
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f7xx_hal.h"
-#include "main.h"
-
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-extern ETH_HandleTypeDef heth;
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
-
-extern void _Error_Handler(char *, int);
-
-void MX_ETH_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
-
-#ifdef __cplusplus
-}
-#endif
-#endif /*__ eth_H */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

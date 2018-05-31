@@ -94,10 +94,6 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   /* Get clock configuration */
   HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
   
-  /* USER CODE BEGIN SysInit */
-  SystemCoreClockUpdate();
-  /* USER CODE END SysInit */
-
   /* Compute TIM1 clock */
   uwTimclock = 2*HAL_RCC_GetPCLK2Freq();
    
