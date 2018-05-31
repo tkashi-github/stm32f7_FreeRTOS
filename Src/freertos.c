@@ -51,7 +51,7 @@
 #include "task.h"
 #include "cmsis_os.h"
 
-/* USER CODE BEGIN Includes */     
+/* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -86,7 +86,7 @@ osThreadId LEDTaskHandle[enLED_MAX];
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
-void StartDefaultTask(void const * argument);
+void StartDefaultTask(void const *argument);
 
 extern void MX_USB_DEVICE_Init(void);
 extern void MX_FATFS_Init(void);
@@ -129,51 +129,52 @@ __weak void vApplicationTickHook(void)
 
 /* Init FreeRTOS */
 
-void MX_FREERTOS_Init(void) {
-  /* USER CODE BEGIN Init */
+void MX_FREERTOS_Init(void)
+{
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	/* USER CODE END Init */
 
-  /* USER CODE BEGIN RTOS_MUTEX */
+	/* USER CODE BEGIN RTOS_MUTEX */
 	/* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
+	/* USER CODE END RTOS_MUTEX */
 
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
+	/* USER CODE BEGIN RTOS_SEMAPHORES */
 	/* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
+	/* USER CODE END RTOS_SEMAPHORES */
 
-  /* USER CODE BEGIN RTOS_TIMERS */
+	/* USER CODE BEGIN RTOS_TIMERS */
 	/* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
+	/* USER CODE END RTOS_TIMERS */
 
-  /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 1024);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+	/* Create the thread(s) */
+	/* definition and creation of defaultTask */
+	osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 1024);
+	defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-  /* USER CODE BEGIN RTOS_THREADS */
+	/* USER CODE BEGIN RTOS_THREADS */
 
-  /* USER CODE END RTOS_THREADS */
+	/* USER CODE END RTOS_THREADS */
 
-  /* USER CODE BEGIN RTOS_QUEUES */
+	/* USER CODE BEGIN RTOS_QUEUES */
 	/* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
+	/* USER CODE END RTOS_QUEUES */
 }
 
 /* StartDefaultTask function */
-void StartDefaultTask(void const * argument)
+void StartDefaultTask(void const *argument)
 {
-  /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
+	/* USER CODE BEGIN */
+	char *pszTemp = "NUCLEO-F767ZI\r\n";
+	/* USER CODE END */
+	/* init code for USB_DEVICE */
+	MX_USB_DEVICE_Init();
 
-  /* init code for FATFS */
-  MX_FATFS_Init();
+	/* init code for LWIP */
+	MX_LWIP_Init();
 
-  /* init code for LWIP */
-  MX_LWIP_Init();
-
-  /* USER CODE BEGIN StartDefaultTask */
-	HAL_UART_Transmit(&huart3, (uint8_t *)pszTemp, (uint16_t)strlen(pszTemp), 50u);
+	/* USER CODE BEGIN StartDefaultTask */
+	HAL_UART_Transmit(&huart3, (uint8_t *)pszTemp, (uint16_t)strlen(pszTemp), 50);
 	osThreadDef(Led0Task, LEDTask, osPriorityNormal, 0, 1024);
 	osThreadDef(Led1Task, LEDTask, osPriorityNormal, 0, 1024);
 	osThreadDef(Led2Task, LEDTask, osPriorityNormal, 0, 1024);
@@ -182,7 +183,7 @@ void StartDefaultTask(void const * argument)
 	LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
 
 	osThreadSuspend(osThreadGetId());
-  /* USER CODE END StartDefaultTask */
+	/* USER CODE END StartDefaultTask */
 }
 
 /* USER CODE BEGIN Application */
@@ -199,11 +200,10 @@ void LEDTask(void const *argument)
 	/* Infinite loop */
 	for (;;)
 	{
-		HAL_UART_Transmit(&huart3, (uint8_t*)szTemp, (uint16_t)strlen(szTemp), 50);
+		HAL_UART_Transmit(&huart3, (uint8_t *)szTemp, (uint16_t)strlen(szTemp), 50);
 		HAL_GPIO_TogglePin(LEDPort, u16LEDPin[(uint32_t)argument]);
 		vTaskDelay(u32LEDBlinkTime[(uint32_t)argument]);
 	}
-
 }
 /* USER CODE END Application */
 
