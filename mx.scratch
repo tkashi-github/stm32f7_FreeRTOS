@@ -9,7 +9,7 @@
 
 <filestoremove>
     <file>
-    <name>..\Src\eth.c</name>
+    <name>..\Src\dma.c</name>
     </file>
 </filestoremove>
 
@@ -478,10 +478,6 @@
 
                                 <file>
                                  <name>..\Src\crc.c</name>
-                                </file>
-
-                                <file>
-                                 <name>..\Src\dma.c</name>
                                 </file>
 
                                 <file>

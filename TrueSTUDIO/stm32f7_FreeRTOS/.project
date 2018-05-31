@@ -484,17 +484,17 @@
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link><link>
-			<name>Application</name>
+			
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			
 		</link><link>
-			<name>Middlewares</name>
+			
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			
 		</link><link>
-			<name>Drivers</name>
+			
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			
 		</link><link>
 			<name>Middlewares/LwIP/ip6_frag.c</name>
 			<type>1</type>
@@ -696,10 +696,6 @@
 			<type>1</type>
 			<location>PARENT-2-PROJECT_LOC/Middlewares/Third_Party/LwIP/src/netif/ppp/pppapi.c</location>
 		</link><link>
-			<name>Application/User/dma.c</name>
-			<type>1</type>
-			<location>PARENT-2-PROJECT_LOC/Src/dma.c</location>
-		</link><link>
 			<name>Middlewares/LwIP/demand.c</name>
 			<type>1</type>
 			<location>PARENT-2-PROJECT_LOC/Middlewares/Third_Party/LwIP/src/netif/ppp/demand.c</location>
@@ -799,5 +795,17 @@
 			<name>Middlewares/LwIP/pbuf.c</name>
 			<type>1</type>
 			<location>PARENT-2-PROJECT_LOC/Middlewares/Third_Party/LwIP/src/core/pbuf.c</location>
+		</link><link>
+			<name>Application</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link><link>
+			<name>Middlewares</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link><link>
+			<name>Drivers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link></linkedResources>
 </projectDescription>

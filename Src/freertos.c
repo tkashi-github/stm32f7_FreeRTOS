@@ -164,25 +164,29 @@ void MX_FREERTOS_Init(void)
 /* StartDefaultTask function */
 void StartDefaultTask(void const *argument)
 {
-	/* USER CODE BEGIN */
-	char *pszTemp = "NUCLEO-F767ZI\r\n";
-	/* USER CODE END */
+
 	/* init code for USB_DEVICE */
 	MX_USB_DEVICE_Init();
+
+	/* init code for FATFS */
+	MX_FATFS_Init();
 
 	/* init code for LWIP */
 	MX_LWIP_Init();
 
 	/* USER CODE BEGIN StartDefaultTask */
-	HAL_UART_Transmit(&huart3, (uint8_t *)pszTemp, (uint16_t)strlen(pszTemp), 50);
-	osThreadDef(Led0Task, LEDTask, osPriorityNormal, 0, 1024);
-	osThreadDef(Led1Task, LEDTask, osPriorityNormal, 0, 1024);
-	osThreadDef(Led2Task, LEDTask, osPriorityNormal, 0, 1024);
-	LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
-	LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
-	LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
+	{
+		char *pszTemp = "NUCLEO-F767ZI\r\n";
+		HAL_UART_Transmit(&huart3, (uint8_t *)pszTemp, (uint16_t)strlen(pszTemp), 50);
+		osThreadDef(Led0Task, LEDTask, osPriorityNormal, 0, 1024);
+		osThreadDef(Led1Task, LEDTask, osPriorityNormal, 0, 1024);
+		osThreadDef(Led2Task, LEDTask, osPriorityNormal, 0, 1024);
+		LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
+		LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
+		LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
 
-	osThreadSuspend(osThreadGetId());
+		osThreadSuspend(osThreadGetId());
+	}
 	/* USER CODE END StartDefaultTask */
 }
 
@@ -195,7 +199,7 @@ void LEDTask(void const *argument)
 		osThreadSuspend(osThreadGetId());
 	}
 
-	snprintf(szTemp, 64, "LED%dTask\r\n", argument);
+	snprintf(szTemp, 64, "LED%luTask\r\n", (uint32_t)argument);
 
 	/* Infinite loop */
 	for (;;)
