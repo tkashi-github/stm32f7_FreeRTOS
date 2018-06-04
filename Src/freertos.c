@@ -79,9 +79,9 @@ const uint16_t u16LEDPin[enLED_MAX] = {
 	GPIO_PIN_14,
 };
 const uint32_t u32LEDBlinkTime[enLED_MAX] = {
-	100u,
-	200u,
-	500u};
+	250u,
+	500u,
+	1000u};
 osThreadId LEDTaskHandle[enLED_MAX];
 /* USER CODE END Variables */
 
@@ -193,18 +193,16 @@ void StartDefaultTask(void const *argument)
 /* USER CODE BEGIN Application */
 void LEDTask(void const *argument)
 {
-	char szTemp[64];
 	if ((uint32_t)argument >= (uint32_t)enLED_MAX)
 	{
 		osThreadSuspend(osThreadGetId());
 	}
 
-	snprintf(szTemp, 64, "LED%luTask\r\n", (uint32_t)argument);
 
 	/* Infinite loop */
 	for (;;)
 	{
-		HAL_UART_Transmit(&huart3, (uint8_t *)szTemp, (uint16_t)strlen(szTemp), 50);
+		printf("[%s (%d)] LED%luTask (%lu msec)\r\n", __FUNCTION__, __LINE__, (uint32_t)argument, xTaskGetTickCount());
 		HAL_GPIO_TogglePin(LEDPort, u16LEDPin[(uint32_t)argument]);
 		vTaskDelay(u32LEDBlinkTime[(uint32_t)argument]);
 	}
