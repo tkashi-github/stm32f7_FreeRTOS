@@ -262,6 +262,16 @@
 			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/RingBuffer.h</location>
 		</link>
 		<link>
+			<name>Application/UsrSrc/TaskConsole.c</name>
+			<type>1</type>
+			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/TaskConsole.c</location>
+		</link>
+		<link>
+			<name>Application/UsrSrc/TaskConsole.h</name>
+			<type>1</type>
+			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/TaskConsole.h</location>
+		</link>
+		<link>
 			<name>Drivers/CMSIS/system_stm32f7xx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Src/system_stm32f7xx.c</locationURI>

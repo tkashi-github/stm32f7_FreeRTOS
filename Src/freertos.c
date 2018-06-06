@@ -56,7 +56,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "usart.h"
-
+#include "TaskConsole.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -176,11 +176,11 @@ void StartDefaultTask(void const *argument)
 
 	/* USER CODE BEGIN StartDefaultTask */
 	{
-		char *pszTemp = "NUCLEO-F767ZI\r\n";
-		HAL_UART_Transmit(&huart3, (uint8_t *)pszTemp, (uint16_t)strlen(pszTemp), 50);
-		osThreadDef(Led0Task, LEDTask, osPriorityNormal, 0, 1024);
-		osThreadDef(Led1Task, LEDTask, osPriorityNormal, 0, 1024);
-		osThreadDef(Led2Task, LEDTask, osPriorityNormal, 0, 1024);
+		osThreadDef(ConsoleTask, ConsoleTask, osPriorityLow, 0, 8192);
+		ConsoleTaskHandle = osThreadCreate(osThread(ConsoleTask), 0);
+		osThreadDef(Led0Task, LEDTask, osPriorityLow, 0, 1024);
+		osThreadDef(Led1Task, LEDTask, osPriorityLow, 0, 1024);
+		osThreadDef(Led2Task, LEDTask, osPriorityLow, 0, 1024);
 		LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
 		LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
 		LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
@@ -202,7 +202,7 @@ void LEDTask(void const *argument)
 	/* Infinite loop */
 	for (;;)
 	{
-		printf("[%s (%d)] LED%luTask (%lu msec)\r\n", __FUNCTION__, __LINE__, (uint32_t)argument, xTaskGetTickCount());
+		//printf("[%s (%d)] LED%luTask (%lu msec)\r\n", __FUNCTION__, __LINE__, (uint32_t)argument, xTaskGetTickCount());
 		HAL_GPIO_TogglePin(LEDPort, u16LEDPin[(uint32_t)argument]);
 		vTaskDelay(u32LEDBlinkTime[(uint32_t)argument]);
 	}

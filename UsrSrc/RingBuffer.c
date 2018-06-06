@@ -38,18 +38,11 @@ _Bool GetRBu8(stu8RingBuffer_t *pRB, uint8_t *pu8Val)
 	if ((pRB != NULL) && (pu8Val != NULL))
 	{
 		uint32_t cpsr = DisableIRQ();
-		uint32_t nextrp = pRB->rp + 1;
-		nextrp %= DEF_RB_LEN;
-		if (pRB->wp != nextrp)
+		if (pRB->wp != pRB->rp)
 		{
 			*pu8Val = pRB->u8Data[pRB->rp];
 			pRB->rp++;
 			pRB->rp %= DEF_RB_LEN;
-			if (pRB->wp == pRB->rp)
-			{
-				pRB->wp++;
-				pRB->wp %= DEF_RB_LEN;
-			}
 			bret = true;
 		}
 		SetIRQ(cpsr);

@@ -89,6 +89,18 @@ void MX_USART3_UART_Init(void)
 	{
 		_Error_Handler(__FILE__, __LINE__);
 	}
+	/* USER CODE BEGIN MX_USART3_UART_Init 1 */
+	/* Enable the USART Parity Error and Data Register not empty Interrupts */
+	SET_BIT(huart3.Instance->CR1, USART_CR1_PEIE | USART_CR1_RXNEIE);
+
+	/* Enable the USART Error Interrupt: (Frame error, noise error, overrun error) */
+	SET_BIT(huart3.Instance->CR3, USART_CR3_EIE);
+	xStdioEventGroup = xEventGroupCreate();
+	vSemaphoreCreateBinary(s_xStdioRxSemaphore);
+	vSemaphoreCreateBinary(s_xStdioTxSemaphore);
+	ClearRBu8(&s_stStdioRxBuf);
+	ClearRBu8(&s_stStdioTxBuf);
+	/* USER CODE END MX_USART3_UART_Init 1 */
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
@@ -117,14 +129,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 		/* USART3 interrupt Init */
 		HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
 		HAL_NVIC_EnableIRQ(USART3_IRQn);
-		/* USER CODE BEGIN USART3_MspInit 1 */
-
-		xStdioEventGroup = xEventGroupCreate();
-		vSemaphoreCreateBinary( s_xStdioRxSemaphore );
-		vSemaphoreCreateBinary( s_xStdioTxSemaphore );
-		ClearRBu8(&s_stStdioRxBuf);
-		ClearRBu8(&s_stStdioTxBuf);
-		/* USER CODE END USART3_MspInit 1 */
 	}
 }
 
@@ -171,7 +175,7 @@ void StandardIO_IntHndle(UART_HandleTypeDef *huart)
 		/* UART in mode Receiver ---------------------------------------------------*/
 		if (((isrflags & USART_ISR_RXNE) != RESET) && ((cr1its & USART_CR1_RXNEIE) != RESET))
 		{
-			PushRBu8(&s_stStdioRxBuf, (uint8_t)(huart->Instance->RDR & (uint8_t)huart->Mask));
+			PushRBu8(&s_stStdioRxBuf, (uint8_t)(huart->Instance->RDR & (uint8_t)0xFFU));
 			// xHigherPriorityTaskWoken must be initialised to pdFALSE.
 			xHigherPriorityTaskWoken = pdFALSE;
 
@@ -232,20 +236,7 @@ void StandardIO_IntHndle(UART_HandleTypeDef *huart)
 			/* UART in mode Receiver ---------------------------------------------------*/
 			if (((isrflags & USART_ISR_RXNE) != RESET) && ((cr1its & USART_CR1_RXNEIE) != RESET))
 			{
-				PushRBu8(&s_stStdioRxBuf, (uint8_t)(huart->Instance->RDR & (uint8_t)huart->Mask));
-				// xHigherPriorityTaskWoken must be initialised to pdFALSE.
-				xHigherPriorityTaskWoken = pdFALSE;
-
-				// Set bit 0
-				xResult = xEventGroupSetBitsFromISR(
-					xStdioEventGroup, // The event group being updated.
-					0x00000001u, &xHigherPriorityTaskWoken);
-
-				// Was the message posted successfully?
-				if (xResult == pdPASS)
-				{
-					portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-				}
+				volatile uint8_t dummy = (uint8_t)(huart->Instance->RDR & (uint8_t)huart->Mask);
 			}
 
 			/* If Overrun error occurs, or if any error occurs in DMA mode reception,
@@ -285,9 +276,12 @@ void StandardIO_IntHndle(UART_HandleTypeDef *huart)
 	if (((isrflags & USART_ISR_TXE) != RESET) && ((cr1its & USART_CR1_TXEIE) != RESET))
 	{
 		uint8_t u8Val;
-		if(GetRBu8(&s_stStdioTxBuf, &u8Val) != false){
+		if (GetRBu8(&s_stStdioTxBuf, &u8Val) != false)
+		{
 			huart->Instance->TDR = u8Val;
-		}else{
+		}
+		else
+		{
 			CLEAR_BIT(huart->Instance->CR1, USART_CR1_TXEIE);
 		}
 
@@ -302,19 +296,21 @@ void StandardIO_IntHndle(UART_HandleTypeDef *huart)
 	}
 }
 
-void RTOS_GetChar(char *ch){
+void RTOS_GetChar(char *ch)
+{
 	uint8_t u8val;
-	EventBits_t uxBits;
 
-	if (ch != NULL){
-		while (GetRBu8(&s_stStdioRxBuf, &u8val) == false){
+	if (ch != NULL)
+	{
+		while (GetRBu8(&s_stStdioRxBuf, &u8val) == false)
+		{
 
-			uxBits = xEventGroupWaitBits(
-				xStdioEventGroup, // The event group being tested.
-				0x00000001u,			  // The bits within the event group to wait for.
-				pdTRUE,			  // BIT_0  should be cleared before returning.
-				pdFALSE,		  // Don't wait for both bits, either bit will do.
-				portMAX_DELAY);   // Wait a maximum of 100ms for either bit to be set.
+			xEventGroupWaitBits(
+					xStdioEventGroup, // The event group being tested.
+					0x00000001u,	  // The bits within the event group to wait for.
+					pdTRUE,			  // BIT_0  should be cleared before returning.
+					pdFALSE,		  // Don't wait for both bits, either bit will do.
+					portMAX_DELAY);   // Wait a maximum of 100ms for either bit to be set.
 		}
 
 		*ch = (char)u8val;
@@ -322,21 +318,26 @@ void RTOS_GetChar(char *ch){
 }
 void RTOS_PutChar(char ch)
 {
-	if (PushRBu8(&s_stStdioTxBuf, (uint8_t)ch) != false){
+	if (PushRBu8(&s_stStdioTxBuf, (uint8_t)ch) != false)
+	{
 		SET_BIT(huart3.Instance->CR1, USART_CR1_TXEIE);
 	}
 }
 void RTOS_PutString(const char pszStr[])
 {
-	if(xSemaphoreTake(s_xStdioTxSemaphore, portMAX_DELAY) == pdTRUE){
-		if(pszStr != NULL){
+	if (xSemaphoreTake(s_xStdioTxSemaphore, portMAX_DELAY) == pdTRUE)
+	{
+		if (pszStr != NULL)
+		{
 			uint32_t u32 = 0u;
 
-			while((pszStr[u32] != '\0') || (u32 != UINT32_MAX)){
+			while ((pszStr[u32] != '\0') && (u32 != UINT32_MAX))
+			{
 				PushRBu8(&s_stStdioTxBuf, (uint8_t)pszStr[u32]);
 				u32++;
 			}
-			if((huart3.Instance->CR1 & USART_CR1_TXEIE) != USART_CR1_TXEIE){
+			if ((huart3.Instance->CR1 & USART_CR1_TXEIE) != USART_CR1_TXEIE)
+			{
 				SET_BIT(huart3.Instance->CR1, USART_CR1_TXEIE);
 			}
 		}
@@ -344,15 +345,19 @@ void RTOS_PutString(const char pszStr[])
 	}
 }
 
-__attribute__((weak)) int __io_putchar(int ch){
+__attribute__((weak)) int __io_putchar(int ch)
+{
 	RTOS_PutChar((char)ch);
 	return 0;
 }
-__attribute__((weak)) int __io_getchar(void){
+__attribute__((weak)) int __io_getchar(void)
+{
 	char ch;
 
 	RTOS_GetChar(&ch);
 
+	/* echo back */
+	RTOS_PutChar((char)ch);
 	return ch;
 }
 
