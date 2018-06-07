@@ -132,6 +132,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/mimiclib</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>Application/TrueSTUDIO/startup_stm32f767xx.s</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/startup_stm32f767xx.s</locationURI>
@@ -861,5 +866,21 @@
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c</locationURI>
 		</link>
+		<link>
+			<name>Middlewares/mimiclib/mimicstring.c</name>
+			<type>1</type>
+			<locationURI>$%7BPROJECT_ROOT%7D/Middlewares/Third_Party/mimiclib/mimicstring.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/mimiclib/mimicstring.h</name>
+			<type>1</type>
+			<locationURI>$%7BPROJECT_ROOT%7D/Middlewares/Third_Party/mimiclib/mimicstring.h</locationURI>
+		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>PROJECT_ROOT</name>
+			<value>$%7BPARENT-2-PROJECT_LOC%7D</value>
+		</variable>
+	</variableList>
 </projectDescription>
