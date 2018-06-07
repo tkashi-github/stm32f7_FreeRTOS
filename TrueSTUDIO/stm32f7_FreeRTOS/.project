@@ -254,27 +254,27 @@
 		<link>
 			<name>Application/UsrSrc/CPUFunc.h</name>
 			<type>1</type>
-			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/CPUFunc.h</location>
+			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/CPUFunc.h</locationURI>
 		</link>
 		<link>
 			<name>Application/UsrSrc/RingBuffer.c</name>
 			<type>1</type>
-			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/RingBuffer.c</location>
+			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/RingBuffer.c</locationURI>
 		</link>
 		<link>
 			<name>Application/UsrSrc/RingBuffer.h</name>
 			<type>1</type>
-			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/RingBuffer.h</location>
+			<locationURI>$%7BPROJECT_ROOT7D/UsrSrc/RingBuffer.h</locationURI>
 		</link>
 		<link>
 			<name>Application/UsrSrc/TaskConsole.c</name>
 			<type>1</type>
-			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/TaskConsole.c</location>
+			<locationURI>$%7BProjectRoot%7D/UsrSrc/TaskConsole.c</locationURI>
 		</link>
 		<link>
 			<name>Application/UsrSrc/TaskConsole.h</name>
 			<type>1</type>
-			<location>C:/workspace/TrueStudio/nucleo/stm32f7_FreeRTOS/UsrSrc/TaskConsole.h</location>
+			<locationURI>$%7BProjectRoot%7D/UsrSrc/TaskConsole.h</locationURI>
 		</link>
 		<link>
 			<name>Drivers/CMSIS/system_stm32f7xx.c</name>
@@ -879,7 +879,7 @@
 	</linkedResources>
 	<variableList>
 		<variable>
-			<name>PROJECT_ROOT</name>
+			<name>ProjectRoot</name>
 			<value>$%7BPARENT-2-PROJECT_LOC%7D</value>
 		</variable>
 	</variableList>
