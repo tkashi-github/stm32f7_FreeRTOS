@@ -264,17 +264,17 @@
 		<link>
 			<name>Application/UsrSrc/RingBuffer.h</name>
 			<type>1</type>
-			<locationURI>$%7BPROJECT_ROOT7D/UsrSrc/RingBuffer.h</locationURI>
+			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/RingBuffer.h</locationURI>
 		</link>
 		<link>
 			<name>Application/UsrSrc/TaskConsole.c</name>
 			<type>1</type>
-			<locationURI>$%7BProjectRoot%7D/UsrSrc/TaskConsole.c</locationURI>
+			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/TaskConsole.c</locationURI>
 		</link>
 		<link>
 			<name>Application/UsrSrc/TaskConsole.h</name>
 			<type>1</type>
-			<locationURI>$%7BProjectRoot%7D/UsrSrc/TaskConsole.h</locationURI>
+			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/TaskConsole.h</locationURI>
 		</link>
 		<link>
 			<name>Drivers/CMSIS/system_stm32f7xx.c</name>
@@ -879,7 +879,7 @@
 	</linkedResources>
 	<variableList>
 		<variable>
-			<name>ProjectRoot</name>
+			<name>PROJECT_ROOT</name>
 			<value>$%7BPARENT-2-PROJECT_LOC%7D</value>
 		</variable>
 	</variableList>
