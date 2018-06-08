@@ -71,6 +71,13 @@ static void bsp_printf(const char *format, ...){
 void ConsoleTask(void const *argument){
 	char szBuf[512];
 
+	bsp_printf("\r\n\r\nCompiler Version\r\n");
+
+#ifdef __GNUC__
+	bsp_printf("GCC %d.%d.%d\r\n\r\n", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__);
+#else
+	bsp_printf("Unkown Compiler\r\n\r\n");
+#endif
 	bsp_printf("%s", DEF_PROMPT);
 
 	//osThreadSuspend(osThreadGetId());
