@@ -132,11 +132,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/mimiclib</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>Application/TrueSTUDIO/startup_stm32f767xx.s</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/startup_stm32f767xx.s</locationURI>
@@ -257,6 +252,16 @@
 			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/CPUFunc.h</locationURI>
 		</link>
 		<link>
+			<name>Application/UsrSrc/ConsoleCmd.c</name>
+			<type>1</type>
+			<locationURI>PROJECT_ROOT/UsrSrc/ConsoleCmd.c</locationURI>
+		</link>
+		<link>
+			<name>Application/UsrSrc/ConsoleCmd.h</name>
+			<type>1</type>
+			<locationURI>PROJECT_ROOT/UsrSrc/ConsoleCmd.h</locationURI>
+		</link>
+		<link>
 			<name>Application/UsrSrc/RingBuffer.c</name>
 			<type>1</type>
 			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/RingBuffer.c</locationURI>
@@ -275,6 +280,16 @@
 			<name>Application/UsrSrc/TaskConsole.h</name>
 			<type>1</type>
 			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/TaskConsole.h</locationURI>
+		</link>
+		<link>
+			<name>Application/UsrSrc/version.c</name>
+			<type>1</type>
+			<locationURI>PROJECT_ROOT/UsrSrc/version.c</locationURI>
+		</link>
+		<link>
+			<name>Application/UsrSrc/version.h</name>
+			<type>1</type>
+			<locationURI>PROJECT_ROOT/UsrSrc/version.h</locationURI>
 		</link>
 		<link>
 			<name>Drivers/CMSIS/system_stm32f7xx.c</name>
@@ -865,16 +880,6 @@
 			<name>Middlewares/USB_Device_Library/usbd_ioreq.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/mimiclib/mimicstring.c</name>
-			<type>1</type>
-			<locationURI>$%7BPROJECT_ROOT%7D/Middlewares/Third_Party/mimiclib/mimicstring.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/mimiclib/mimicstring.h</name>
-			<type>1</type>
-			<locationURI>$%7BPROJECT_ROOT%7D/Middlewares/Third_Party/mimiclib/mimicstring.h</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

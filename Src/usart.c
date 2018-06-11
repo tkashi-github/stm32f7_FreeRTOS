@@ -358,6 +358,9 @@ __attribute__((weak)) int __io_getchar(void)
 
 	/* echo back */
 	RTOS_PutChar((char)ch);
+	if(ch == '\r'){	
+		RTOS_PutChar('\n');
+	}
 	return ch;
 }
 

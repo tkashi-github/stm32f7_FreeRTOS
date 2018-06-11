@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include "TaskConsole.h"
+#include "version.h"
+#include "ConsoleCmd.h"
 
 
 osThreadId ConsoleTaskHandle;
@@ -13,10 +15,8 @@ osThreadId ConsoleTaskHandle;
 extern __attribute__((weak)) int __io_getchar(void);
 
 
-static uint32_t bsp_gets(char pszStr[], uint32_t u32Size);
-static void bsp_printf(const char *format, ...);
 
-static uint32_t bsp_gets(char pszStr[], uint32_t u32Size){
+uint32_t bsp_gets(char pszStr[], uint32_t u32Size){
 	uint32_t u32Cnt = 0u;
 
 	if((pszStr != NULL) && (u32Size > 0u)){
@@ -42,7 +42,9 @@ static uint32_t bsp_gets(char pszStr[], uint32_t u32Size){
 					pszStr[u32Cnt] = '\0';
 				}
 				break;
-			case '\r':
+			case '\r':			
+				u32Cnt--;
+				pszStr[u32Cnt] = '\0';
 				bReturnCode = true;
 				break;
 			default:
@@ -56,7 +58,7 @@ static uint32_t bsp_gets(char pszStr[], uint32_t u32Size){
 
 extern void RTOS_PutString(const char pszStr[]);
 
-static void bsp_printf(const char *format, ...){
+void bsp_printf(const char *format, ...){
 	va_list arg;
 	char szStr[512];
 
@@ -71,6 +73,8 @@ static void bsp_printf(const char *format, ...){
 void ConsoleTask(void const *argument){
 	char szBuf[512];
 
+	bsp_printf("\r\n\r\nVersion = %s\r\n", g_szProgramVersion);
+
 	bsp_printf("\r\n\r\nCompiler Version\r\n");
 
 #ifdef __GNUC__
@@ -82,8 +86,30 @@ void ConsoleTask(void const *argument){
 
 	//osThreadSuspend(osThreadGetId());
 	for(;;){
+		uint32_t u32;
+		uint32_t argc;
+		char *argv[16];
+		
 		bsp_gets(szBuf, 512);
+		
+		argc = 0u;
+		argv[argc] = strtok(szBuf, " "); // 1ŒÂ–Ú‚Ì•”•ª•¶Žš—ñŽæ“¾
+    	while (argv[argc] != NULL) {
+			argc++;
+			argv[argc] = strtok(NULL, " "); // 1ŒÂ–Ú‚Ì•”•ª•¶Žš—ñŽæ“¾
+			if(argc >= 16u){
+				break;
+			}
+		}
 
+		u32 = 0u;
+		while(g_stCmdTable[u32].m_pszCmd != NULL){
+			if(stricmp(g_stCmdTable[u32].m_pszCmd, argv[0]) == 0){
+				g_stCmdTable[u32].m_pfnc(argc, (const char **)argv);
+				break;
+			}
+			u32++;
+		}
 		bsp_printf("%s", DEF_PROMPT);
 	}
 }
