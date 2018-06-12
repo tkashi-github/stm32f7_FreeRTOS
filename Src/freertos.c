@@ -161,6 +161,9 @@ void MX_FREERTOS_Init(void)
 	/* USER CODE END RTOS_QUEUES */
 }
 
+/* USER CODE BEGIN 4 */
+
+/* USER CODE END 4 */
 /* StartDefaultTask function */
 void StartDefaultTask(void const *argument)
 {
@@ -176,11 +179,12 @@ void StartDefaultTask(void const *argument)
 
 	/* USER CODE BEGIN StartDefaultTask */
 	{
-		osThreadDef(ConsoleTask, ConsoleTask, osPriorityLow, 0, 8192);
-		ConsoleTaskHandle = osThreadCreate(osThread(ConsoleTask), 0);
+		osThreadDef(ConsoleTask, ConsoleTask, osPriorityLow,0, 8192);
 		osThreadDef(Led0Task, LEDTask, osPriorityLow, 0, 1024);
 		osThreadDef(Led1Task, LEDTask, osPriorityLow, 0, 1024);
 		osThreadDef(Led2Task, LEDTask, osPriorityLow, 0, 1024);
+		ConsoleTaskHandle = osThreadCreate(osThread(ConsoleTask), 0);
+		
 		LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
 		LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
 		LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);

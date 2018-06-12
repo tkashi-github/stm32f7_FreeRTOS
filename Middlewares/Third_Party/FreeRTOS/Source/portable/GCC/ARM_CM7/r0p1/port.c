@@ -178,6 +178,39 @@ static UBaseType_t uxCriticalNesting = 0xaaaaaaaa;
 /*
  * See header file for description.
  */
+#if( portUSING_MPU_WRAPPERS == 1 )
+StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters, BaseType_t xRunPrivileged )
+{
+	/* Simulate the stack frame as it would be created by a context switch
+	interrupt. */
+	pxTopOfStack--; /* Offset added to account for the way the MCU uses the stack on entry/exit of interrupts. */
+	*pxTopOfStack = portINITIAL_XPSR;	/* xPSR */
+	pxTopOfStack--;
+	*pxTopOfStack = ( ( StackType_t ) pxCode ) & portSTART_ADDRESS_MASK;	/* PC */
+	pxTopOfStack--;
+	*pxTopOfStack = 0;	/* LR */
+	pxTopOfStack -= 5;	/* R12, R3, R2 and R1. */
+	*pxTopOfStack = ( StackType_t ) pvParameters;	/* R0 */
+
+	/* A save method is being used that requires each task to maintain its
+	own exec return value. */
+	pxTopOfStack--;
+	*pxTopOfStack = portINITIAL_EXC_RETURN;
+
+	pxTopOfStack -= 9;	/* R11, R10, R9, R8, R7, R6, R5 and R4. */
+
+	if( xRunPrivileged == pdTRUE )
+	{
+		*pxTopOfStack = portINITIAL_CONTROL_IF_PRIVILEGED;
+	}
+	else
+	{
+		*pxTopOfStack = portINITIAL_CONTROL_IF_UNPRIVILEGED;
+	}
+
+	return pxTopOfStack;
+}
+#else
 StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters )
 {
 	/* Simulate the stack frame as it would be created by a context switch
@@ -206,6 +239,7 @@ StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t px
 
 	return pxTopOfStack;
 }
+#endif
 /*-----------------------------------------------------------*/
 
 static void prvTaskExitError( void )
