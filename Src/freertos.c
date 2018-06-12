@@ -57,6 +57,10 @@
 #include <string.h>
 #include "usart.h"
 #include "TaskConsole.h"
+#include "CPUFunc.h"
+#include <stdint.h>
+#include <stdbool.h>
+
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -100,6 +104,11 @@ void LEDTask(void const *argument);
 /* Hook prototypes */
 void vApplicationIdleHook(void);
 void vApplicationTickHook(void);
+void GetRunCount(uint32_t *p32Last, uint32_t *pu32Max);
+
+static uint32_t s_u32CurrentRun = 0u;
+static uint32_t s_u32LastRun = 0u;
+static uint32_t s_u32RunMax = 0u;
 
 /* USER CODE BEGIN 2 */
 __weak void vApplicationIdleHook(void)
@@ -113,10 +122,17 @@ __weak void vApplicationIdleHook(void)
    important that vApplicationIdleHook() is permitted to return to its calling
    function, because it is the responsibility of the idle task to clean up
    memory allocated by the kernel to any task that has since been deleted. */
+	#if 1
+	uint32_t primask = DisableIRQ();
+
+	s_u32CurrentRun++;
+	SetIRQ(primask);
+	#endif
 }
 /* USER CODE END 2 */
 
 /* USER CODE BEGIN 3 */
+_Bool g_bInitEnd = false;
 __weak void vApplicationTickHook(void)
 {
 	/* This function will be called by each tick interrupt if
@@ -124,7 +140,41 @@ __weak void vApplicationTickHook(void)
    added here, but the tick hook is called from an interrupt context, so
    code must not attempt to block, and only the interrupt safe FreeRTOS API
    functions can be used (those that end in FromISR()). */
+#if 1
+	static uint32_t cnt = 0u;
+	if(g_bInitEnd != false){
+		if (cnt >= 1000u)
+		{
+			cnt = 0u;
+			uint32_t primask = DisableIRQ();
+
+			s_u32LastRun = s_u32CurrentRun;
+			s_u32CurrentRun = 0u;
+			if (s_u32LastRun > s_u32RunMax)
+			{
+				s_u32RunMax = s_u32LastRun;
+			}
+			SetIRQ(primask);
+		}else{
+			cnt++;
+		}
+	}else{
+		s_u32CurrentRun = 0u;
+	}
+#endif
 }
+
+void GetRunCount(uint32_t *p32Last, uint32_t *pu32Max)
+{
+	if ((p32Last != NULL) && (pu32Max != NULL))
+	{
+		uint32_t primask = DisableIRQ();
+		*p32Last = s_u32LastRun;
+		*pu32Max = s_u32RunMax;
+		SetIRQ(primask);
+	}
+}
+
 /* USER CODE END 3 */
 
 /* Init FreeRTOS */
@@ -162,7 +212,7 @@ void MX_FREERTOS_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-osThreadDef(ConsoleTask, ConsoleTask, osPriorityLow,0, 8192);
+osThreadDef(ConsoleTask, ConsoleTask, osPriorityLow, 0, 8192);
 osThreadDef(Led0Task, LEDTask, osPriorityLow, 0, 1024);
 osThreadDef(Led1Task, LEDTask, osPriorityLow, 0, 1024);
 osThreadDef(Led2Task, LEDTask, osPriorityLow, 0, 1024);
@@ -182,13 +232,14 @@ void StartDefaultTask(void const *argument)
 
 	/* USER CODE BEGIN StartDefaultTask */
 	{
-		
+
 		ConsoleTaskHandle = osThreadCreate(osThread(ConsoleTask), 0);
-		
+
 		LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
 		LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
 		LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
-
+		vTaskDelay(1000u);
+		g_bInitEnd = true;
 		osThreadSuspend(osThreadGetId());
 	}
 	/* USER CODE END StartDefaultTask */
@@ -201,7 +252,6 @@ void LEDTask(void const *argument)
 	{
 		osThreadSuspend(osThreadGetId());
 	}
-
 
 	/* Infinite loop */
 	for (;;)

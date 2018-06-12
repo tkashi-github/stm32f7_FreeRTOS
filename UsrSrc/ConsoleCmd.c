@@ -6,21 +6,25 @@
 #include "version.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "CPUFunc.h"
 
-uint32_t bsp_gets(char pszStr[], uint32_t u32Size);
-void bsp_printf(const char *format, ...);
-_Bool bsp_kbhit(void);
+extern uint32_t bsp_gets(char pszStr[], uint32_t u32Size);
+extern void bsp_printf(const char *format, ...);
+extern _Bool bsp_kbhit(void);
+extern void GetRunCount(uint32_t *p32Last, uint32_t *pu32Max);
 
 static void CmdHelp(uint32_t argc, const char *argv[]);
 static void CmdVersion(uint32_t argc, const char *argv[]);
 static void CmdArg(uint32_t argc, const char *argv[]);
 static void CmdTick(uint32_t argc, const char *argv[]);
+static void CmdLoad(uint32_t argc, const char *argv[]);
 
 stCmdTable_t g_stCmdTable[] = {
 	{"HELP",        CmdHelp,        "Help"},	/* Help Command*/
 	{"VERSION",     CmdVersion,     "Version"},	/* Version Command*/
 	{"ARG",         CmdArg,         "Argment Test"},	/* Version Command*/
 	{"TICK",        CmdTick,        "Tick Test"},	/* Version Command*/
+	{"LOAD",        CmdLoad,        "CPU Load"},	/* Version Command*/
 	{NULL, NULL, NULL},	/* Terminator */
 };
 
@@ -54,22 +58,33 @@ static void CmdVersion(uint32_t argc, const char *argv[]){
 
 
 static void CmdArg(uint32_t argc, const char *argv[]){
-	printf("Argment Test\r\n");
+	bsp_printf("Argment Test\r\n");
 
 	for(uint32_t i=0u;i<argc;i++){
-		printf("argc = %02lu : %s\r\n", i,argv[i]);
+		bsp_printf("argc = %02lu : %s\r\n", i,argv[i]);
 	}
 }
 
 static void CmdTick(uint32_t argc, const char *argv[]){
 	TickType_t tick;
-	printf("Tick Test\r\n");
+	bsp_printf("Tick Test\r\n");
 	
 	tick = xTaskGetTickCount();
 	while(bsp_kbhit() == false){
-		printf("tick = %lu msec\r\n", tick);
+		bsp_printf("tick = %lu msec\r\n", tick);
 		vTaskDelayUntil((TickType_t *const)&tick, 1000);
 	}
 }
-
+static void CmdLoad(uint32_t argc, const char *argv[]){
+	TickType_t tick;
+	uint32_t LastRun, MaxRun;
+	bsp_printf("CPU Load\r\n");
+	
+	tick = xTaskGetTickCount();
+	while(bsp_kbhit() == false){
+		GetRunCount(&LastRun, &MaxRun);
+		bsp_printf("Load = %f [%lu, %lu](%lu msec)\r\n", 1.0 - (double)LastRun/(double)MaxRun, LastRun, MaxRun, tick);
+		vTaskDelayUntil((TickType_t *const)&tick, 1000);
+	}
+}
 
