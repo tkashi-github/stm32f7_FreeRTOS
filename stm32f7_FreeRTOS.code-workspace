@@ -62,7 +62,8 @@
 		],
 		"files.associations": {
 			"usart.h": "c",
-			"stm32f7xx_it.h": "c"
+			"stm32f7xx_it.h": "c",
+			"version.h": "c"
 		},
 	},
 	

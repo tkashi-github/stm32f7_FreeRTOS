@@ -15,4 +15,5 @@ typedef struct{
 _Bool PushRBu8(stu8RingBuffer_t *pRB, uint8_t u8Val);
 _Bool GetRBu8(stu8RingBuffer_t *pRB, uint8_t *pu8Val);
 _Bool ClearRBu8(stu8RingBuffer_t *pRB);
+_Bool IsRBu8EMpty(stu8RingBuffer_t *pRB);
 #endif

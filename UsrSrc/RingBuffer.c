@@ -69,3 +69,22 @@ _Bool ClearRBu8(stu8RingBuffer_t *pRB)
 	}
 	return bret;
 }
+
+
+_Bool IsRBu8EMpty(stu8RingBuffer_t *pRB){
+	/*-- var --*/
+	_Bool bret = true;
+
+	/*-- begin --*/
+	if (pRB != NULL)
+	{
+		uint32_t cpsr = DisableIRQ();
+		if (pRB->wp != pRB->rp)
+		{
+			bret = false;
+		}
+		SetIRQ(cpsr);
+		
+	}
+	return bret;
+}

@@ -69,6 +69,43 @@ typedef unsigned long UBaseType_t;
 #endif
 /*-----------------------------------------------------------*/
 
+/* MPU specific constants. */
+#if 0
+//#define portUSING_MPU_WRAPPERS		
+#define portPRIVILEGE_BIT			( 0x80000000UL )
+
+#define portMPU_REGION_READ_WRITE				( 0x03UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_ONLY		( 0x05UL << 24UL )
+#define portMPU_REGION_READ_ONLY				( 0x06UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_WRITE	( 0x01UL << 24UL )
+#define portMPU_REGION_CACHEABLE_BUFFERABLE		( 0x07UL << 16UL )
+#define portMPU_REGION_EXECUTE_NEVER			( 0x01UL << 28UL )
+
+#define portUNPRIVILEGED_FLASH_REGION		( 0UL )
+#define portPRIVILEGED_FLASH_REGION			( 1UL )
+#define portPRIVILEGED_RAM_REGION			( 2UL )
+#define portGENERAL_PERIPHERALS_REGION		( 3UL )
+#define portSTACK_REGION					( 4UL )
+#define portFIRST_CONFIGURABLE_REGION	    ( 5UL )
+#define portLAST_CONFIGURABLE_REGION		( 7UL )
+#define portNUM_CONFIGURABLE_REGIONS		( ( portLAST_CONFIGURABLE_REGION - portFIRST_CONFIGURABLE_REGION ) + 1 )
+#define portTOTAL_NUM_REGIONS				( portNUM_CONFIGURABLE_REGIONS + 1 ) /* Plus one to make space for the stack region. */
+
+#define portSWITCH_TO_USER_MODE() __asm volatile ( " mrs r0, control \n orr r0, #1 \n msr control, r0 " ::: "r0", "memory" )
+
+typedef struct MPU_REGION_REGISTERS
+{
+	uint32_t ulRegionBaseAddress;
+	uint32_t ulRegionAttribute;
+} xMPU_REGION_REGISTERS;
+
+/* Plus 1 to create space for the stack region. */
+typedef struct MPU_SETTINGS
+{
+	xMPU_REGION_REGISTERS xRegion[ portTOTAL_NUM_REGIONS ];
+} xMPU_SETTINGS;
+#endif
+
 /* Architecture specifics. */
 #define portSTACK_GROWTH			( -1 )
 #define portTICK_PERIOD_MS			( ( TickType_t ) 1000 / configTICK_RATE_HZ )

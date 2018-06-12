@@ -345,6 +345,10 @@ void RTOS_PutString(const char pszStr[])
 	}
 }
 
+_Bool RTOS_kbhit(void){
+	return !IsRBu8EMpty(&s_stStdioRxBuf);
+}
+
 __attribute__((weak)) int __io_putchar(int ch)
 {
 	RTOS_PutChar((char)ch);

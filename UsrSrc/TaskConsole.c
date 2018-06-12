@@ -36,14 +36,18 @@ uint32_t bsp_gets(char pszStr[], uint32_t u32Size){
 				break;
 			}
 			switch(ch){
-			case '\b':
+			case '\b':	// バックスペース
+				if(u32Cnt > 0u){
+					u32Cnt--;
+					pszStr[u32Cnt] = '\0';
+				}
 				if(u32Cnt > 0u){
 					u32Cnt--;
 					pszStr[u32Cnt] = '\0';
 				}
 				break;
-			case '\r':			
-				u32Cnt--;
+			case '\r':		// TeraTermの改行コードは "CR"設定ではCRのみ送られてくる（CRLFにならない）
+				u32Cnt--;			
 				pszStr[u32Cnt] = '\0';
 				bReturnCode = true;
 				break;
@@ -69,6 +73,12 @@ void bsp_printf(const char *format, ...){
 	RTOS_PutString(szStr);
 
 }
+extern _Bool RTOS_kbhit(void);
+
+_Bool bsp_kbhit(void){
+	return RTOS_kbhit();
+}
+
 
 void ConsoleTask(void const *argument){
 	char szBuf[512];
