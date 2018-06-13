@@ -119,17 +119,19 @@ void MX_LWIP_Init(void)
 
 	if (netif_is_link_up(&gnetif))
 	{
+		bsp_printf("[%s (%d)] netif_set_up\r\n", __FUNCTION__, __LINE__);
 		/* When the netif is fully configured this function must be called */
 		netif_set_up(&gnetif);
 	}
 	else
 	{
+		bsp_printf("[%s (%d)] netif_set_down\r\n", __FUNCTION__, __LINE__);
 		/* When the netif link is down this function must be called */
 		netif_set_down(&gnetif);
 	}
 
 	/* USER CODE BEGIN 3 */
-	//bsp_printf("[%s (%d)] dhcp_start\r\n", __FUNCTION__, __LINE__);
+	bsp_printf("[%s (%d)] LwIP Start\r\n", __FUNCTION__, __LINE__);
 	/* USER CODE END 3 */
 }
 
