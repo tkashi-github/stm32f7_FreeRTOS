@@ -51,6 +51,8 @@
 #include "lwip.h"
 #include "lwip/init.h"
 #include "lwip/netif.h"
+#include "ethernetif.h"
+
 #if defined(__CC_ARM) /* MDK ARM Compiler */
 #include "lwip/sio.h"
 #endif /* MDK ARM Compiler */
@@ -71,25 +73,43 @@ struct netif gnetif;
 ip4_addr_t ipaddr;
 ip4_addr_t netmask;
 ip4_addr_t gw;
+uint8_t IP_ADDRESS[4];
+uint8_t NETMASK_ADDRESS[4];
+uint8_t GATEWAY_ADDRESS[4];
 
 /* USER CODE BEGIN 2 */
-
+extern void HAL_ETH_MspInit(ETH_HandleTypeDef *ethHandle);
+extern ETH_HandleTypeDef heth;
 /* USER CODE END 2 */
 
-extern void bsp_printf(const char *format, ...);
 /**
   * LwIP initialization function
   */
 void MX_LWIP_Init(void)
 {
-	bsp_printf("[%s (%d)] Enter\r\n", __FUNCTION__, __LINE__);
+	HAL_ETH_MspInit(&heth);
+	
+	/* IP addresses initialization */
+	IP_ADDRESS[0] = 192;
+	IP_ADDRESS[1] = 168;
+	IP_ADDRESS[2] = 100;
+	IP_ADDRESS[3] = 10;
+	NETMASK_ADDRESS[0] = 255;
+	NETMASK_ADDRESS[1] = 255;
+	NETMASK_ADDRESS[2] = 255;
+	NETMASK_ADDRESS[3] = 0;
+	GATEWAY_ADDRESS[0] = 0;
+	GATEWAY_ADDRESS[1] = 0;
+	GATEWAY_ADDRESS[2] = 0;
+	GATEWAY_ADDRESS[3] = 0;
+
 	/* Initilialize the LwIP stack with RTOS */
 	tcpip_init(NULL, NULL);
 
-	/* IP addresses initialization with DHCP (IPv4) */
-	ipaddr.addr = PP_HTONL(LWIP_MAKEU32(192,168,100,110));
-	netmask.addr = PP_HTONL(LWIP_MAKEU32(255,255,255,0));
-	gw.addr = 0;
+	/* IP addresses initialization without DHCP (IPv4) */
+	IP4_ADDR(&ipaddr, IP_ADDRESS[0], IP_ADDRESS[1], IP_ADDRESS[2], IP_ADDRESS[3]);
+	IP4_ADDR(&netmask, NETMASK_ADDRESS[0], NETMASK_ADDRESS[1], NETMASK_ADDRESS[2], NETMASK_ADDRESS[3]);
+	IP4_ADDR(&gw, GATEWAY_ADDRESS[0], GATEWAY_ADDRESS[1], GATEWAY_ADDRESS[2], GATEWAY_ADDRESS[3]);
 
 	/* add the network interface (IPv4/IPv6) with RTOS */
 	netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
@@ -99,26 +119,18 @@ void MX_LWIP_Init(void)
 
 	if (netif_is_link_up(&gnetif))
 	{
-		bsp_printf("[%s (%d)] link up\r\n", __FUNCTION__, __LINE__);
 		/* When the netif is fully configured this function must be called */
 		netif_set_up(&gnetif);
 	}
 	else
 	{
-		bsp_printf("[%s (%d)] link down\r\n", __FUNCTION__, __LINE__);
 		/* When the netif link is down this function must be called */
 		netif_set_down(&gnetif);
 	}
+
 	/* USER CODE BEGIN 3 */
 	//bsp_printf("[%s (%d)] dhcp_start\r\n", __FUNCTION__, __LINE__);
 	/* USER CODE END 3 */
-	
-	/* Start DHCP negotiation for a network interface (IPv4) */
-	//dhcp_start(&gnetif);
-
-	
-
-	
 }
 
 #ifdef USE_OBSOLETE_USER_CODE_SECTION_4

@@ -87,8 +87,8 @@ typedef int sys_prot_t;
 #define LWIP_RAND() ((u32_t)rand())
 
 
-extern void bsp_printf(const char *format, ...);
-#define LWIP_PLATFORM_DIAG(message) bsp_printf(message)
+//extern void bsp_printf(const char *format, ...);
+//#define LWIP_PLATFORM_DIAG(message) bsp_printf(message)
 
 
 #endif /* __CC_H__ */
