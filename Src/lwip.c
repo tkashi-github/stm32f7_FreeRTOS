@@ -46,12 +46,12 @@
   *
   ******************************************************************************
   */
-  
+
 /* Includes ------------------------------------------------------------------*/
 #include "lwip.h"
 #include "lwip/init.h"
 #include "lwip/netif.h"
-#if defined ( __CC_ARM )  /* MDK ARM Compiler */
+#if defined(__CC_ARM) /* MDK ARM Compiler */
 #include "lwip/sio.h"
 #endif /* MDK ARM Compiler */
 
@@ -60,7 +60,7 @@
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
 /* ETH Variables initialization ----------------------------------------------*/
-void _Error_Handler(char * file, int line);
+void _Error_Handler(char *file, int line);
 
 /* USER CODE BEGIN 1 */
 
@@ -76,42 +76,49 @@ ip4_addr_t gw;
 
 /* USER CODE END 2 */
 
+extern void bsp_printf(const char *format, ...);
 /**
   * LwIP initialization function
   */
 void MX_LWIP_Init(void)
 {
-  /* Initilialize the LwIP stack with RTOS */
-  tcpip_init( NULL, NULL );
+	bsp_printf("[%s (%d)] Enter\r\n", __FUNCTION__, __LINE__);
+	/* Initilialize the LwIP stack with RTOS */
+	tcpip_init(NULL, NULL);
 
-  /* IP addresses initialization with DHCP (IPv4) */
-  ipaddr.addr = 0;
-  netmask.addr = 0;
-  gw.addr = 0;
+	/* IP addresses initialization with DHCP (IPv4) */
+	ipaddr.addr = PP_HTONL(LWIP_MAKEU32(192,168,100,110));
+	netmask.addr = PP_HTONL(LWIP_MAKEU32(255,255,255,0));
+	gw.addr = 0;
 
-  /* add the network interface (IPv4/IPv6) with RTOS */
-  netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
+	/* add the network interface (IPv4/IPv6) with RTOS */
+	netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
 
-  /* Registers the default network interface */
-  netif_set_default(&gnetif);
+	/* Registers the default network interface */
+	netif_set_default(&gnetif);
 
-  if (netif_is_link_up(&gnetif))
-  {
-    /* When the netif is fully configured this function must be called */
-    netif_set_up(&gnetif);
-  }
-  else
-  {
-    /* When the netif link is down this function must be called */
-    netif_set_down(&gnetif);
-  }
+	if (netif_is_link_up(&gnetif))
+	{
+		bsp_printf("[%s (%d)] link up\r\n", __FUNCTION__, __LINE__);
+		/* When the netif is fully configured this function must be called */
+		netif_set_up(&gnetif);
+	}
+	else
+	{
+		bsp_printf("[%s (%d)] link down\r\n", __FUNCTION__, __LINE__);
+		/* When the netif link is down this function must be called */
+		netif_set_down(&gnetif);
+	}
+	/* USER CODE BEGIN 3 */
+	//bsp_printf("[%s (%d)] dhcp_start\r\n", __FUNCTION__, __LINE__);
+	/* USER CODE END 3 */
+	
+	/* Start DHCP negotiation for a network interface (IPv4) */
+	//dhcp_start(&gnetif);
 
-  /* Start DHCP negotiation for a network interface (IPv4) */
-  dhcp_start(&gnetif);
+	
 
-/* USER CODE BEGIN 3 */
-
-/* USER CODE END 3 */
+	
 }
 
 #ifdef USE_OBSOLETE_USER_CODE_SECTION_4
@@ -121,7 +128,7 @@ void MX_LWIP_Init(void)
 /* USER CODE END 4 */
 #endif
 
-#if defined ( __CC_ARM )  /* MDK ARM Compiler */
+#if defined(__CC_ARM) /* MDK ARM Compiler */
 /**
  * Opens a serial device for communication.
  *
@@ -130,13 +137,13 @@ void MX_LWIP_Init(void)
  */
 sio_fd_t sio_open(u8_t devnum)
 {
-  sio_fd_t sd;
+	sio_fd_t sd;
 
-/* USER CODE BEGIN 7 */
-  sd = 0; // dummy code
-/* USER CODE END 7 */
-	
-  return sd;
+	/* USER CODE BEGIN 7 */
+	sd = 0; // dummy code
+			/* USER CODE END 7 */
+
+	return sd;
 }
 
 /**
@@ -149,8 +156,8 @@ sio_fd_t sio_open(u8_t devnum)
  */
 void sio_send(u8_t c, sio_fd_t fd)
 {
-/* USER CODE BEGIN 8 */
-/* USER CODE END 8 */
+	/* USER CODE BEGIN 8 */
+	/* USER CODE END 8 */
 }
 
 /**
@@ -166,12 +173,12 @@ void sio_send(u8_t c, sio_fd_t fd)
  */
 u32_t sio_read(sio_fd_t fd, u8_t *data, u32_t len)
 {
-  u32_t recved_bytes;
+	u32_t recved_bytes;
 
-/* USER CODE BEGIN 9 */
-  recved_bytes = 0; // dummy code
-/* USER CODE END 9 */	
-  return recved_bytes;
+	/* USER CODE BEGIN 9 */
+	recved_bytes = 0; // dummy code
+					  /* USER CODE END 9 */
+	return recved_bytes;
 }
 
 /**
@@ -185,12 +192,12 @@ u32_t sio_read(sio_fd_t fd, u8_t *data, u32_t len)
  */
 u32_t sio_tryread(sio_fd_t fd, u8_t *data, u32_t len)
 {
-  u32_t recved_bytes;
+	u32_t recved_bytes;
 
-/* USER CODE BEGIN 10 */
-  recved_bytes = 0; // dummy code
-/* USER CODE END 10 */	
-  return recved_bytes;
+	/* USER CODE BEGIN 10 */
+	recved_bytes = 0; // dummy code
+					  /* USER CODE END 10 */
+	return recved_bytes;
 }
 #endif /* MDK ARM Compiler */
 

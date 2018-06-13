@@ -32,6 +32,7 @@
 #ifndef __CC_H__
 #define __CC_H__
 
+#define LWIP_DEBUG
 #include "cpu.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -84,5 +85,10 @@ typedef int sys_prot_t;
 
 /* Define random number generator function */
 #define LWIP_RAND() ((u32_t)rand())
+
+
+extern void bsp_printf(const char *format, ...);
+#define LWIP_PLATFORM_DIAG(message) bsp_printf(message)
+
 
 #endif /* __CC_H__ */
