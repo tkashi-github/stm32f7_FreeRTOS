@@ -7,6 +7,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "CPUFunc.h"
+#include "ping.h"
 
 extern uint32_t bsp_gets(char pszStr[], uint32_t u32Size);
 extern void bsp_printf(const char *format, ...);
@@ -25,6 +26,7 @@ stCmdTable_t g_stCmdTable[] = {
 	{"ARG",         CmdArg,         "Argment Test"},	/* Version Command*/
 	{"TICK",        CmdTick,        "Tick Test"},	/* Version Command*/
 	{"LOAD",        CmdLoad,        "CPU Load"},	/* Version Command*/
+	{"PING",        CmdPing,        "Ping"},	/* Version Command*/
 	{NULL, NULL, NULL},	/* Terminator */
 };
 

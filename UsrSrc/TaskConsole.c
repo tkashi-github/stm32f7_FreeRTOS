@@ -13,7 +13,7 @@
 osThreadId ConsoleTaskHandle;
 #define DEF_PROMPT "STM32F7 NUCLEO > "
 extern __attribute__((weak)) int __io_getchar(void);
-
+extern __attribute__((weak)) int __io_putchar(int ch);
 
 
 uint32_t bsp_gets(char pszStr[], uint32_t u32Size){
@@ -28,30 +28,33 @@ uint32_t bsp_gets(char pszStr[], uint32_t u32Size){
 			char ch;
 			ch = __io_getchar();
 			
-			pszStr[u32Cnt] = ch;
-			u32Cnt++;
-			if(u32Cnt >= u32Size){
-				u32Cnt--;
-				pszStr[u32Cnt] = '\0';
-				break;
-			}
+			
 			switch(ch){
 			case '\b':	// バックスペース
 				if(u32Cnt > 0u){
 					u32Cnt--;
 					pszStr[u32Cnt] = '\0';
-				}
-				if(u32Cnt > 0u){
-					u32Cnt--;
-					pszStr[u32Cnt] = '\0';
+					__io_putchar('\b');
+					__io_putchar(' ');
+					__io_putchar('\b');
 				}
 				break;
 			case '\r':		// TeraTermの改行コードは "CR"設定ではCRのみ送られてくる（CRLFにならない）
-				u32Cnt--;			
+				//u32Cnt--;			
 				pszStr[u32Cnt] = '\0';
 				bReturnCode = true;
+				__io_putchar((char)ch);
+				__io_putchar('\n');
 				break;
 			default:
+				pszStr[u32Cnt] = ch;
+				u32Cnt++;
+				if(u32Cnt >= u32Size){
+					u32Cnt--;
+					pszStr[u32Cnt] = '\0';
+					break;
+				}
+				__io_putchar((char)ch);
 				break;
 			}
 		}

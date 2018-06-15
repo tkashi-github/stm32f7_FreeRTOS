@@ -282,6 +282,16 @@
 			<locationURI>$%7BPROJECT_ROOT%7D/UsrSrc/TaskConsole.h</locationURI>
 		</link>
 		<link>
+			<name>Application/UsrSrc/ping.c</name>
+			<type>1</type>
+			<locationURI>PROJECT_ROOT/UsrSrc/ping.c</locationURI>
+		</link>
+		<link>
+			<name>Application/UsrSrc/ping.h</name>
+			<type>1</type>
+			<locationURI>PROJECT_ROOT/UsrSrc/ping.h</locationURI>
+		</link>
+		<link>
 			<name>Application/UsrSrc/version.c</name>
 			<type>1</type>
 			<locationURI>PROJECT_ROOT/UsrSrc/version.c</locationURI>

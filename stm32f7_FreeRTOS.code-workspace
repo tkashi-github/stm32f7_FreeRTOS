@@ -63,7 +63,11 @@
 		"files.associations": {
 			"usart.h": "c",
 			"stm32f7xx_it.h": "c",
-			"version.h": "c"
+			"version.h": "c",
+			"icmp.h": "c",
+			"arch.h": "c",
+			"sockets.h": "c",
+			"ip.h": "c"
 		},
 	},
 	
