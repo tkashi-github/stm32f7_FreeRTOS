@@ -10,9 +10,9 @@ void ConsoleTask(void const *argument);
 
 
 
-uint32_t bsp_gets(char pszStr[], uint32_t u32Size);
-void bsp_printf(const char *format, ...);
-_Bool bsp_kbhit(void);
+extern uint32_t bsp_gets(char pszStr[], uint32_t u32Size);
+extern void bsp_printf(const char *format, ...);
+extern _Bool bsp_kbhit(void);
 
 
 #endif

@@ -67,6 +67,8 @@
 
 static void icmp_send_response(struct pbuf *p, u8_t type, u8_t code);
 
+
+extern void bsp_printf(const char *format, ...);
 /**
  * Processes ICMP input packets, called from ip_input().
  *
@@ -135,7 +137,8 @@ icmp_input(struct pbuf *p, struct netif *inp)
       goto icmperr;
 #endif /* LWIP_BROADCAST_PING */
     }
-    LWIP_DEBUGF(ICMP_DEBUG, ("icmp_input: ping\n"));
+    LWIP_DEBUGF(ICMP_DEBUG, ("icmp_input: ping\r\n"));
+	bsp_printf("icmp_input: ping\r\n");
     if (p->tot_len < sizeof(struct icmp_echo_hdr)) {
       LWIP_DEBUGF(ICMP_DEBUG, ("icmp_input: bad ICMP echo received\n"));
       goto lenerr;

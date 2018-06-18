@@ -62,6 +62,7 @@
 
 const struct eth_addr ethbroadcast = {{0xff,0xff,0xff,0xff,0xff,0xff}};
 const struct eth_addr ethzero = {{0,0,0,0,0,0}};
+extern void bsp_printf(const char *format, ...);
 
 /**
  * @ingroup lwip_nosys
@@ -103,6 +104,14 @@ ethernet_input(struct pbuf *p, struct netif *netif)
      (unsigned)ethhdr->src.addr[0],  (unsigned)ethhdr->src.addr[1],  (unsigned)ethhdr->src.addr[2],
      (unsigned)ethhdr->src.addr[3],  (unsigned)ethhdr->src.addr[4],  (unsigned)ethhdr->src.addr[5],
      lwip_htons(ethhdr->type)));
+#if 0
+	bsp_printf("ethernet_input: dest:%"X8_F":%"X8_F":%"X8_F":%"X8_F":%"X8_F":%"X8_F", src:%"X8_F":%"X8_F":%"X8_F":%"X8_F":%"X8_F":%"X8_F", type:%"X16_F"\r\n",
+     (unsigned)ethhdr->dest.addr[0], (unsigned)ethhdr->dest.addr[1], (unsigned)ethhdr->dest.addr[2],
+     (unsigned)ethhdr->dest.addr[3], (unsigned)ethhdr->dest.addr[4], (unsigned)ethhdr->dest.addr[5],
+     (unsigned)ethhdr->src.addr[0],  (unsigned)ethhdr->src.addr[1],  (unsigned)ethhdr->src.addr[2],
+     (unsigned)ethhdr->src.addr[3],  (unsigned)ethhdr->src.addr[4],  (unsigned)ethhdr->src.addr[5],
+     lwip_htons(ethhdr->type));
+#endif
 
   type = ethhdr->type;
 #if ETHARP_SUPPORT_VLAN
@@ -165,6 +174,7 @@ ethernet_input(struct pbuf *p, struct netif *netif)
 #if LWIP_IPV4 && LWIP_ARP
     /* IP packet? */
     case PP_HTONS(ETHTYPE_IP):
+	bsp_printf("[%s (%d)] CASE ENTER (%lu msec)\r\n", __FUNCTION__, __LINE__, xTaskGetTickCount());
       if (!(netif->flags & NETIF_FLAG_ETHARP)) {
         goto free_and_return;
       }
@@ -179,6 +189,7 @@ ethernet_input(struct pbuf *p, struct netif *netif)
         /* pass to IP layer */
         ip4_input(p, netif);
       }
+	  bsp_printf("[%s (%d)] CASE EXIT (%lu msec)\r\n", __FUNCTION__, __LINE__, xTaskGetTickCount());
       break;
 
     case PP_HTONS(ETHTYPE_ARP):
