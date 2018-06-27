@@ -11,6 +11,9 @@
 
 
 osThreadId ConsoleTaskHandle;
+osStaticThreadDef_t ConsoleTaskTCB;
+uint32_t ConsoleTaskStack[8192/sizeof(uint32_t)];
+
 #define DEF_PROMPT "STM32F7 NUCLEO > "
 extern __attribute__((weak)) int __io_getchar(void);
 extern __attribute__((weak)) int __io_putchar(int ch);

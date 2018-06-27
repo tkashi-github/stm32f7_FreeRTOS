@@ -60,7 +60,7 @@
 #include "CPUFunc.h"
 #include <stdint.h>
 #include <stdbool.h>
-
+#include "FreeRTOSConfig.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -212,10 +212,96 @@ void MX_FREERTOS_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-osThreadDef(ConsoleTask, ConsoleTask, osPriorityLow, 0, 8192);
-osThreadDef(Led0Task, LEDTask, osPriorityLow, 0, 1024);
-osThreadDef(Led1Task, LEDTask, osPriorityLow, 0, 1024);
-osThreadDef(Led2Task, LEDTask, osPriorityLow, 0, 1024);
+typedef struct{
+	osThreadId    *pOsId;
+	osThreadDef_t OsDef;
+	void          *argment;
+}stOSdefTable_t;
+
+StaticTask_t LEDTaskTCB[enLED_MAX];
+uint32_t LEDTaskStack[enLED_MAX][1024/sizeof(uint32_t)];
+
+static const stOSdefTable_t g_stOSTable[] = {
+	{
+		&ConsoleTaskHandle,
+		{"ConsoleTask", ConsoleTask, osPriorityLow, 1, 8192, ConsoleTaskStack, &ConsoleTaskTCB},
+		0,
+	},
+	{
+		&LEDTaskHandle[enLED0],
+		{"LEDTask0", LEDTask, osPriorityLow, 1, 1024, LEDTaskStack[enLED0], &LEDTaskTCB[enLED0]},
+		(void *)enLED0,
+	},
+	{
+		&LEDTaskHandle[enLED1],
+		{"LEDTask1", LEDTask, osPriorityLow, 1, 1024, LEDTaskStack[enLED1], &LEDTaskTCB[enLED1]},
+		(void *)enLED1,
+	},
+	{
+		&LEDTaskHandle[enLED2],
+		{"LEDTask2", LEDTask, osPriorityLow, 1, 1024, LEDTaskStack[enLED2], &LEDTaskTCB[enLED2]},
+		(void *)enLED2,
+	},
+	// Terminate
+	{	
+		NULL,
+		{0},
+		0,
+	},
+};
+#if (configSUPPORT_STATIC_ALLOCATION == 1)
+/* configSUPPORT_STATIC_ALLOCATION is set to 1, so the application must provide an
+implementation of vApplicationGetIdleTaskMemory() to provide the memory that is
+used by the Idle task. */
+void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
+                                    StackType_t **ppxIdleTaskStackBuffer,
+                                    uint32_t *pulIdleTaskStackSize )
+{
+/* If the buffers to be provided to the Idle task are declared inside this
+function then they must be declared static - otherwise they will be allocated on
+the stack and so not exists after this function exits. */
+	static StaticTask_t xIdleTaskTCB;
+	static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ];
+
+    /* Pass out a pointer to the StaticTask_t structure in which the Idle task's
+    state will be stored. */
+    *ppxIdleTaskTCBBuffer = &xIdleTaskTCB;
+
+    /* Pass out the array that will be used as the Idle task's stack. */
+    *ppxIdleTaskStackBuffer = uxIdleTaskStack;
+
+    /* Pass out the size of the array pointed to by *ppxIdleTaskStackBuffer.
+    Note that, as the array is necessarily of type StackType_t,
+    configMINIMAL_STACK_SIZE is specified in words, not bytes. */
+    *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
+}
+/* configSUPPORT_STATIC_ALLOCATION and configUSE_TIMERS are both set to 1, so the
+application must provide an implementation of vApplicationGetTimerTaskMemory()
+to provide the memory that is used by the Timer service task. */
+void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
+                                     StackType_t **ppxTimerTaskStackBuffer,
+                                     uint32_t *pulTimerTaskStackSize )
+{
+/* If the buffers to be provided to the Timer task are declared inside this
+function then they must be declared static - otherwise they will be allocated on
+the stack and so not exists after this function exits. */
+static StaticTask_t xTimerTaskTCB;
+static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ];
+
+    /* Pass out a pointer to the StaticTask_t structure in which the Timer
+    task's state will be stored. */
+    *ppxTimerTaskTCBBuffer = &xTimerTaskTCB;
+
+    /* Pass out the array that will be used as the Timer task's stack. */
+    *ppxTimerTaskStackBuffer = uxTimerTaskStack;
+
+    /* Pass out the size of the array pointed to by *ppxTimerTaskStackBuffer.
+    Note that, as the array is necessarily of type StackType_t,
+    configTIMER_TASK_STACK_DEPTH is specified in words, not bytes. */
+    *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
+}
+#endif
+
 /* USER CODE END 4 */
 /* StartDefaultTask function */
 void StartDefaultTask(void const *argument)
@@ -228,16 +314,16 @@ void StartDefaultTask(void const *argument)
 	MX_FATFS_Init();
 
 	/* init code for LWIP */
-	MX_LWIP_Init();
+	//MX_LWIP_Init();
 
 	/* USER CODE BEGIN StartDefaultTask */
 	{
+		uint32_t i=0;
 
-		ConsoleTaskHandle = osThreadCreate(osThread(ConsoleTask), 0);
-
-		LEDTaskHandle[enLED0] = osThreadCreate(osThread(Led0Task), (void *)enLED0);
-		LEDTaskHandle[enLED1] = osThreadCreate(osThread(Led1Task), (void *)enLED1);
-		LEDTaskHandle[enLED2] = osThreadCreate(osThread(Led2Task), (void *)enLED2);
+		while(g_stOSTable[i].pOsId != NULL){
+			*g_stOSTable[i].pOsId = osThreadCreate(&g_stOSTable[i].OsDef, g_stOSTable[i].argment);
+			i++;
+		}
 		vTaskDelay(1000u);
 		g_bInitEnd = true;
 		osThreadSuspend(osThreadGetId());

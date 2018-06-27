@@ -138,7 +138,7 @@ icmp_input(struct pbuf *p, struct netif *inp)
 #endif /* LWIP_BROADCAST_PING */
     }
     LWIP_DEBUGF(ICMP_DEBUG, ("icmp_input: ping\r\n"));
-	bsp_printf("icmp_input: ping\r\n");
+	bsp_printf("[%s (%d)] icmp_input: ping\r\n", __FUNCTION__, __LINE__);
     if (p->tot_len < sizeof(struct icmp_echo_hdr)) {
       LWIP_DEBUGF(ICMP_DEBUG, ("icmp_input: bad ICMP echo received\n"));
       goto lenerr;

@@ -6,6 +6,9 @@
 #include "cmsis_os.h"
 
 extern osThreadId ConsoleTaskHandle;
+extern osStaticThreadDef_t ConsoleTaskTCB;
+extern uint32_t ConsoleTaskStack[];
+
 void ConsoleTask(void const *argument);
 
 

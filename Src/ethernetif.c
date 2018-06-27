@@ -406,9 +406,12 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
 	}
 
 	SCB_CleanDCache();
-	bsp_printf("[%s (%d)] TP (%lu msec)\r\n", __FUNCTION__, __LINE__, xTaskGetTickCount());
 	/* Prepare transmit descriptors to give to DMA */
-	HAL_ETH_TransmitFrame(&heth, framelength);
+	if(HAL_OK != HAL_ETH_TransmitFrame(&heth, framelength)){
+		bsp_printf("[%s (%d)] NG (%lu msec)\r\n", __FUNCTION__, __LINE__, xTaskGetTickCount());
+	}else{
+		bsp_printf("[%s (%d)] OK framelength = %lu (%lu msec)\r\n", __FUNCTION__, __LINE__, framelength, xTaskGetTickCount());
+	}
 
 	errval = ERR_OK;
 

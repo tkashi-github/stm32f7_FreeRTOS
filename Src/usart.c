@@ -65,7 +65,9 @@ static stu8RingBuffer_t s_stStdioTxBuf;
 
 static SemaphoreHandle_t s_xStdioRxSemaphore = NULL;
 static SemaphoreHandle_t s_xStdioTxSemaphore = NULL;
-
+static StaticSemaphore_t s_xStdioRxSemaphoreBuffer;
+static StaticSemaphore_t s_xStdioTxSemaphoreBuffer;
+static StaticEventGroup_t s_xStdioEventGroupBuffer;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;
@@ -95,9 +97,9 @@ void MX_USART3_UART_Init(void)
 
 	/* Enable the USART Error Interrupt: (Frame error, noise error, overrun error) */
 	SET_BIT(huart3.Instance->CR3, USART_CR3_EIE);
-	xStdioEventGroup = xEventGroupCreate();
-	vSemaphoreCreateBinary(s_xStdioRxSemaphore);
-	vSemaphoreCreateBinary(s_xStdioTxSemaphore);
+	xStdioEventGroup = xEventGroupCreateStatic(&s_xStdioEventGroupBuffer);
+	s_xStdioRxSemaphore = xSemaphoreCreateBinaryStatic(&s_xStdioRxSemaphoreBuffer);
+	s_xStdioTxSemaphore = xSemaphoreCreateBinaryStatic(&s_xStdioTxSemaphoreBuffer);
 	ClearRBu8(&s_stStdioRxBuf);
 	ClearRBu8(&s_stStdioTxBuf);
 	/* USER CODE END MX_USART3_UART_Init 1 */
