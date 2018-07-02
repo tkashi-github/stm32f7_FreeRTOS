@@ -69,7 +69,10 @@
 			"icmp.h": "c",
 			"arch.h": "c",
 			"sockets.h": "c",
-			"ip.h": "c"
+			"ip.h": "c",
+			"task.h": "c",
+			"freertos.h": "c",
+			"freertosconfig.h": "c"
 		},
 	},
 	

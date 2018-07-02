@@ -68,6 +68,7 @@ static SemaphoreHandle_t s_xStdioTxSemaphore = NULL;
 static StaticSemaphore_t s_xStdioRxSemaphoreBuffer;
 static StaticSemaphore_t s_xStdioTxSemaphoreBuffer;
 static StaticEventGroup_t s_xStdioEventGroupBuffer;
+extern void _Error_Handler(char *file, int line);
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart3;
@@ -100,6 +101,8 @@ void MX_USART3_UART_Init(void)
 	xStdioEventGroup = xEventGroupCreateStatic(&s_xStdioEventGroupBuffer);
 	s_xStdioRxSemaphore = xSemaphoreCreateBinaryStatic(&s_xStdioRxSemaphoreBuffer);
 	s_xStdioTxSemaphore = xSemaphoreCreateBinaryStatic(&s_xStdioTxSemaphoreBuffer);
+	xSemaphoreGive(s_xStdioTxSemaphore);
+	xSemaphoreGive(s_xStdioRxSemaphore);
 	ClearRBu8(&s_stStdioRxBuf);
 	ClearRBu8(&s_stStdioTxBuf);
 	/* USER CODE END MX_USART3_UART_Init 1 */

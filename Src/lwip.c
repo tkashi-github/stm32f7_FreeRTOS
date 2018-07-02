@@ -62,7 +62,7 @@
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
 /* ETH Variables initialization ----------------------------------------------*/
-void _Error_Handler(char *file, int line);
+extern void _Error_Handler(char *file, int line);
 
 /* USER CODE BEGIN 1 */
 

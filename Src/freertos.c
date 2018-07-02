@@ -224,7 +224,7 @@ uint32_t LEDTaskStack[enLED_MAX][1024/sizeof(uint32_t)];
 static const stOSdefTable_t g_stOSTable[] = {
 	{
 		&ConsoleTaskHandle,
-		{"ConsoleTask", ConsoleTask, osPriorityLow, 1, 8192, ConsoleTaskStack, &ConsoleTaskTCB},
+		{"ConsoleTask", ConsoleTask, osPriorityBelowNormal, 1, 8192, ConsoleTaskStack, &ConsoleTaskTCB},
 		0,
 	},
 	{
@@ -308,10 +308,10 @@ void StartDefaultTask(void const *argument)
 {
 
 	/* init code for USB_DEVICE */
-	MX_USB_DEVICE_Init();
+	//MX_USB_DEVICE_Init();
 
 	/* init code for FATFS */
-	MX_FATFS_Init();
+	//MX_FATFS_Init();
 
 	/* init code for LWIP */
 	//MX_LWIP_Init();

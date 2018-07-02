@@ -113,7 +113,7 @@ void ConsoleTask(void const *argument){
     	while (argv[argc] != NULL) {
 			argc++;
 			argv[argc] = strtok(NULL, " "); // 1ŒÂ–Ú‚Ì•”•ª•¶š—ñæ“¾
-			if(argc >= 16u){
+			if(argc >= 15u){
 				break;
 			}
 		}
