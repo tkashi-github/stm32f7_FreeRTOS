@@ -89,7 +89,6 @@ extern void bsp_printf(const char *format, ...);
 
 
 //extern void bsp_printf(const char *format, ...);
-//#define LWIP_PLATFORM_DIAG(message) bsp_printf(message)
-
+//#define LWIP_PLATFORM_DIAG(x) bsp_printf x
 
 #endif /* __CC_H__ */

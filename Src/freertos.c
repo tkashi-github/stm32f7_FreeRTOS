@@ -111,6 +111,12 @@ static uint32_t s_u32LastRun = 0u;
 static uint32_t s_u32RunMax = 0u;
 
 /* USER CODE BEGIN 2 */
+void vApplicationStackOverflowHook( TaskHandle_t xTask,
+                                    signed char *pcTaskName ){
+	bsp_printf("[%s (%d)] Stack Over Flow!!!\r\n", __FUNCTION__, __LINE__);
+	while(1);
+}
+
 __weak void vApplicationIdleHook(void)
 {
 	/* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
@@ -314,7 +320,7 @@ void StartDefaultTask(void const *argument)
 	//MX_FATFS_Init();
 
 	/* init code for LWIP */
-	//MX_LWIP_Init();
+	MX_LWIP_Init();
 
 	/* USER CODE BEGIN StartDefaultTask */
 	{

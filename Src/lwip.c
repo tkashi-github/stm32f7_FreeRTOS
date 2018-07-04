@@ -80,6 +80,7 @@ uint8_t GATEWAY_ADDRESS[4];
 /* USER CODE BEGIN 2 */
 extern void HAL_ETH_MspInit(ETH_HandleTypeDef *ethHandle);
 extern ETH_HandleTypeDef heth;
+extern void bsp_printf(const char *format, ...);
 /* USER CODE END 2 */
 
 /**

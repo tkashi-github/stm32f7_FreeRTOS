@@ -7,6 +7,19 @@
 	"settings": {
 		"c-cpp-flylint.cppcheck.includePaths": [
 			"C:\\Program Files (x86)\\Atollic\\TrueSTUDIO for STM32 9.0.1\\ARMTools\\lib\\gcc\\arm-atollic-eabi\\6.3.1\\include",
+			"${workspaceFolder}/Inc",
+			"${workspaceFolder}/UsrSrc",
+			"${workspaceFolder}/Drivers/STM32F7xx_HAL_Driver/Inc",
+			"${workspaceFolder}/Drivers/STM32F7xx_HAL_Driver/Inc/Legacy",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1",
+			"${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
+			"${workspaceFolder}/Middlewares/ST/STM32_USB_Device_Library/Class/DFU/Inc",
+			"${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F7xx/Include",
+			"${workspaceFolder}/Middlewares/Third_Party/FatFs/src",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
+			"${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS",
+			"${workspaceFolder}/Middlewares/Third_Party/LwIP/src/include",
+			"${workspaceFolder}/Drivers/CMSIS/Include",
 		],
 		"c-cpp-flylint.clang.enable": true,
 		"c-cpp-flylint.cppcheck.standard": [
@@ -72,7 +85,8 @@
 			"ip.h": "c",
 			"task.h": "c",
 			"freertos.h": "c",
-			"freertosconfig.h": "c"
+			"freertosconfig.h": "c",
+			"cc.h": "c"
 		},
 	},
 	

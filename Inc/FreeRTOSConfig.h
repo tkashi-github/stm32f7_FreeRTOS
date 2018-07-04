@@ -109,6 +109,8 @@
 #define configQUEUE_REGISTRY_SIZE                8
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  1
 #define configINITIAL_TICK_COUNT                 0
+#define configCHECK_FOR_STACK_OVERFLOW           1
+
 /* Software timer definitions. */
 #define configUSE_TIMERS             1
 #define configTIMER_TASK_PRIORITY    (2)

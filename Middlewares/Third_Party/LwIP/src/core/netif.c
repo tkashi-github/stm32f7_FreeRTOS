@@ -615,6 +615,8 @@ netif_set_default(struct netif *netif)
            netif ? netif->name[0] : '\'', netif ? netif->name[1] : '\''));
 }
 
+extern void bsp_printf(const char *format, ...);
+
 /**
  * @ingroup netif
  * Bring an interface up, available for processing
@@ -624,6 +626,7 @@ void
 netif_set_up(struct netif *netif)
 {
   if (!(netif->flags & NETIF_FLAG_UP)) {
+	  bsp_printf("[%s (%d)] TP\r\n", __FUNCTION__, __LINE__);
     netif->flags |= NETIF_FLAG_UP;
 
     MIB2_COPY_SYSUPTIME_TO(&netif->ts);
@@ -682,6 +685,8 @@ void
 netif_set_down(struct netif *netif)
 {
   if (netif->flags & NETIF_FLAG_UP) {
+	  	  bsp_printf("[%s (%d)] TP\r\n", __FUNCTION__, __LINE__);
+
     netif->flags &= ~NETIF_FLAG_UP;
     MIB2_COPY_SYSUPTIME_TO(&netif->ts);
 
