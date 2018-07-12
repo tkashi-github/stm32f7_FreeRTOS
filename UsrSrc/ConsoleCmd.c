@@ -8,6 +8,7 @@
 #include "task.h"
 #include "CPUFunc.h"
 #include "ping.h"
+#include <stdatomic.h>
 
 extern uint32_t bsp_gets(char pszStr[], uint32_t u32Size);
 extern void bsp_printf(const char *format, ...);
@@ -19,6 +20,7 @@ static void CmdVersion(uint32_t argc, const char *argv[]);
 static void CmdArg(uint32_t argc, const char *argv[]);
 static void CmdTick(uint32_t argc, const char *argv[]);
 static void CmdLoad(uint32_t argc, const char *argv[]);
+static void CmdAtomicTest(uint32_t argc, const char *argv[]);
 
 stCmdTable_t g_stCmdTable[] = {
 	{"HELP",        CmdHelp,        "Help"},	/* Help Command*/
@@ -27,6 +29,7 @@ stCmdTable_t g_stCmdTable[] = {
 	{"TICK",        CmdTick,        "Tick Test"},	/* Version Command*/
 	{"LOAD",        CmdLoad,        "CPU Load"},	/* Version Command*/
 	{"PING",        CmdPing,        "Ping"},	/* Version Command*/
+	{"ATOMIC",      CmdAtomicTest,  "Atomic Test"},	/* Version Command*/
 	{NULL, NULL, NULL},	/* Terminator */
 };
 
@@ -86,6 +89,26 @@ static void CmdLoad(uint32_t argc, const char *argv[]){
 	while(bsp_kbhit() == false){
 		GetRunCount(&LastRun, &MaxRun);
 		bsp_printf("Load = %f [%lu, %lu](%lu msec)\r\n", 1.0 - (double)LastRun/(double)MaxRun, LastRun, MaxRun, tick);
+		vTaskDelayUntil((TickType_t *const)&tick, 1000);
+	}
+}
+
+_Atomic __attribute__ ((aligned(64))) uint32_t g_u32Atomic;
+uint32_t g_u32NoAtomic;
+
+static void CmdAtomicTest(uint32_t argc, const char *argv[]){
+	uint32_t tmp1, tmp2;
+	TickType_t tick;
+	atomic_init(&g_u32Atomic, 0);
+	g_u32NoAtomic = 0;
+
+	tick = xTaskGetTickCount();
+	while(bsp_kbhit() == false){
+		uint32_t cpsr = DisableIRQ();
+		tmp1 = g_u32Atomic;
+		tmp2 = g_u32NoAtomic;
+		SetIRQ(cpsr);
+		bsp_printf("g_u32Atomic   = %lu : g_u32NoAtomic = %lu (%lu msec)\r\n", tmp1, tmp2, tick);
 		vTaskDelayUntil((TickType_t *const)&tick, 1000);
 	}
 }

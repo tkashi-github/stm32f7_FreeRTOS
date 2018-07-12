@@ -61,6 +61,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "FreeRTOSConfig.h"
+#include <stdatomic.h>
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -111,6 +112,8 @@ static uint32_t s_u32LastRun = 0u;
 static uint32_t s_u32RunMax = 0u;
 
 /* USER CODE BEGIN 2 */
+extern _Atomic uint32_t g_u32Atomic;
+extern uint32_t g_u32NoAtomic;
 void vApplicationStackOverflowHook( TaskHandle_t xTask,
                                     signed char *pcTaskName ){
 	bsp_printf("[%s (%d)] Stack Over Flow!!!\r\n", __FUNCTION__, __LINE__);
@@ -133,11 +136,14 @@ __weak void vApplicationIdleHook(void)
 
 	s_u32CurrentRun++;
 	SetIRQ(primask);
+	atomic_fetch_add(&g_u32Atomic, 1);
+	g_u32NoAtomic++;
 	#endif
 }
 /* USER CODE END 2 */
 
 /* USER CODE BEGIN 3 */
+
 _Bool g_bInitEnd = false;
 __weak void vApplicationTickHook(void)
 {
@@ -149,6 +155,8 @@ __weak void vApplicationTickHook(void)
 #if 1
 	static uint32_t cnt = 0u;
 	if(g_bInitEnd != false){
+		atomic_fetch_add(&g_u32Atomic, 1);
+		g_u32NoAtomic++;
 		if (cnt >= 1000u)
 		{
 			cnt = 0u;

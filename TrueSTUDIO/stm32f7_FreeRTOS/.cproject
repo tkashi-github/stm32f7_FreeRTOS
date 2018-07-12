@@ -134,10 +134,34 @@
 							<inputType id="com.atollic.truestudio.gcc.input.1274347818" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1833765724" name="freertos.c" rcbsApplicability="disable" resourcePath="Application/User/freertos.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.1024884595">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.1024884595" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
+							<option id="com.atollic.truestudio.gcc.cstandard.1750579035" name="C standard" superClass="com.atollic.truestudio.gcc.cstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.cstandard.c1x" valueType="enumerated"/>
+							<inputType id="com.atollic.truestudio.gcc.input.1557572588" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.2134678492" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.2011417875" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.642498839" name="Resource Custom Build Step Output Type"/>
+						</tool>
+					</fileInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.788320110" name="syscalls.c" rcbsApplicability="disable" resourcePath="Application/User/syscalls.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.740796824">
 						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.740796824" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
 							<option id="com.atollic.truestudio.gcc.cstandard.1374841448" name="C standard" superClass="com.atollic.truestudio.gcc.cstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.cstandard.gnu1x" valueType="enumerated"/>
 							<inputType id="com.atollic.truestudio.gcc.input.1832349596" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1155430686" name="ConsoleCmd.c" rcbsApplicability="disable" resourcePath="Application/UsrSrc/ConsoleCmd.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.1592960628">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.1592960628" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
+							<option id="com.atollic.truestudio.gcc.cstandard.336639225" name="C standard" superClass="com.atollic.truestudio.gcc.cstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.cstandard.c1x" valueType="enumerated"/>
+							<inputType id="com.atollic.truestudio.gcc.input.2001060726" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.1715879756" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.1721544788" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.2143097360" name="Resource Custom Build Step Output Type"/>
 						</tool>
 					</fileInfo>
 					<sourceEntries>

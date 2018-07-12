@@ -86,7 +86,8 @@
 			"task.h": "c",
 			"freertos.h": "c",
 			"freertosconfig.h": "c",
-			"cc.h": "c"
+			"cc.h": "c",
+			"stdatomic.h": "c"
 		},
 	},
 	
